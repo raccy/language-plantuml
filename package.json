@@ -1,0 +1,10 @@
+{
+  "name": "language-plantuml",
+  "version": "0.0.0",
+  "description": "PlantUML language support in Atom",
+  "repository": "https://github.com/raccy/language-plantuml",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  }
+}

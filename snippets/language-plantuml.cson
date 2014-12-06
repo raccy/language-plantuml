@@ -1,0 +1,7 @@
+'.source.plantuml':
+  'startuml':
+    'prefix': 'st'
+    'body': 'startuml'
+  'enduml':
+    'prefix': 'en'
+    'body': 'enduml'

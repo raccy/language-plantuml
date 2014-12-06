@@ -1,0 +1,28 @@
+'name': 'PlantUML'
+'scopeName': 'source.plantuml'
+'fileTypes': [
+  'txt'
+]
+'fileLineMatch': '^@startuml'
+'patterns': [
+  {
+    'begin': '^@startuml'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.section.documentation.begin.plantuml'
+    'contentName': 'source.plantuml'
+    'end': '^@enduml'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.section.documentation.end.plantuml'
+    'name': 'meta.documentation.block.plantuml'
+    'patterns': [
+      {
+        'include': '#language'
+      }
+    ]
+  }
+]
+'repository':
+  'language':
+    'patterns': []

@@ -1,0 +1,6 @@
+'.source.plantuml':
+  'editor':
+    'commentStart': '\''
+    'increaseIndentPattern': '(?x) ^ .* \\{ [^}"\']* $'
+    'decreaseIndentPattern': '(?x) ^ \\s* (\\s* /\' .* \'/ \\s*)* \\}'
+    'foldEndPattern': '(?x) ^ \\s* \\}'
