@@ -18,11 +18,41 @@
     'name': 'meta.documentation.block.plantuml'
     'patterns': [
       {
-        'include': '#language'
+        'include': '#plantuml'
       }
     ]
   }
 ]
 'repository':
-  'language':
-    'patterns': []
+  'plantuml':
+    'patterns': [
+      {
+        'begin': '(^[ \\t]+)?(?=\')'
+        'beginCaptures':
+          '1':
+            'name': 'punctuation.whitespace.comment.leading.plantuml'
+        'end': '(?!\\G)'
+        'patterns': [
+          {
+            'begin': '\''
+            'beginCaptures':
+              '0':
+                'name': 'punctuation.definition.comment.plantuml'
+            'end': '\\n'
+            'name': 'comment.line.singlequote.pluantul'
+          }
+        ]
+      }
+      {
+        'begin': '/\''
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.begin.plantuml'
+        'end': '\'/'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.end.pluntuml'
+        'name': 'comment.block.plantuml'
+      }
+
+    ]
