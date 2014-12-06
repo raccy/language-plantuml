@@ -27,6 +27,120 @@
   'plantuml':
     'patterns': [
       {
+        'include': '#comments'
+      }
+      {
+        # TODO: c-like macro
+        'match': '(?x)^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.import.plantuml'
+        'name': 'meta.preprocessor.plantuml'
+      }
+      {
+        # TODO: escaped character
+        'match': '(")([^"]*)(")'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.string.begin.plantuml'
+          '3':
+            'name': 'punctuation.definition.string.end.plantuml'
+        'name': 'string.quoted.double.plantuml'
+      }
+      {
+        'match': '(?x)\\b(?:
+            abstract
+            |actor
+            |agent
+            |artifact
+            |boundary
+            |card
+            |class
+            |cloud
+            |component
+            |control
+            |database
+            |entity
+            |enum
+            |folder
+            |frame
+            |interface
+            |node
+            |object
+            |participant
+            |rect
+            |state
+            |storage
+            |usecase
+            )\\b'
+        'name': 'entity.name.type.plantuml'
+      }
+      {
+        'match': '(?x)\\b(?:
+            activate
+            |again
+            |also
+            |alt
+            |as
+            |autonumber
+            |bottom
+            |box
+            |break
+            |center
+            |create
+            |critical
+            |deactivate
+            |destroy
+            |down
+            |else
+            |elseif
+            |end
+            |endif
+            |endwhile
+            |footbox
+            |footer
+            |fork
+            |group
+            |header
+            |hide
+            |if
+            |is
+            |left
+            |link
+            |loop
+            |namespace
+            |newpage
+            |note
+            |of
+            |on
+            |opt
+            |over
+            |package
+            |page
+            |par
+            |partition
+            |ref
+            |repeat
+            |return
+            |right
+            |rotate
+            |show
+            |skin
+            |skinparam
+            |start
+            |stop
+            |title
+            |top\\s+to\\s+bottom\\s+direction
+            |top
+            |up
+            |while
+            )\\b'
+        'name': 'keyword.control.plantuml'
+      }
+    ]
+  'comments':
+    'patterns': [
+      {
         'begin': '(^[ \\t]+)?(?=\')'
         'beginCaptures':
           '1':
