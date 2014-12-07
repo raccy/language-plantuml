@@ -30,113 +30,116 @@
         'include': '#comments'
       }
       {
-        # TODO: c-like macro
-        'match': '(?x)^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
-        'captures':
-          '1':
-            'name': 'keyword.control.import.plantuml'
-        'name': 'meta.preprocessor.plantuml'
+        'include': '#sequence_diagram'
       }
-      {
-        # TODO: escaped character
-        'match': '(")([^"]*)(")'
-        'captures':
-          '1':
-            'name': 'punctuation.definition.string.begin.plantuml'
-          '3':
-            'name': 'punctuation.definition.string.end.plantuml'
-        'name': 'string.quoted.double.plantuml'
-      }
-      {
-        'match': '(?x)\\b(?:
-            abstract
-            |actor
-            |agent
-            |artifact
-            |boundary
-            |card
-            |class
-            |cloud
-            |component
-            |control
-            |database
-            |entity
-            |enum
-            |folder
-            |frame
-            |interface
-            |node
-            |object
-            |participant
-            |rect
-            |state
-            |storage
-            |usecase
-            )\\b'
-        'name': 'entity.name.type.plantuml'
-      }
-      {
-        'match': '(?x)\\b(?:
-            activate
-            |again
-            |also
-            |alt
-            |as
-            |autonumber
-            |bottom
-            |box
-            |break
-            |center
-            |create
-            |critical
-            |deactivate
-            |destroy
-            |down
-            |else
-            |elseif
-            |end
-            |endif
-            |endwhile
-            |footbox
-            |footer
-            |fork
-            |group
-            |header
-            |hide
-            |if
-            |is
-            |left
-            |link
-            |loop
-            |namespace
-            |newpage
-            |note
-            |of
-            |on
-            |opt
-            |over
-            |package
-            |page
-            |par
-            |partition
-            |ref
-            |repeat
-            |return
-            |right
-            |rotate
-            |show
-            |skin
-            |skinparam
-            |start
-            |stop
-            |title
-            |top\\s+to\\s+bottom\\s+direction
-            |top
-            |up
-            |while
-            )\\b'
-        'name': 'keyword.control.plantuml'
-      }
+      # {
+      #   # TODO: c-like macro
+      #   'match': '(?x)^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
+      #   'captures':
+      #     '1':
+      #       'name': 'keyword.control.import.plantuml'
+      #   'name': 'meta.preprocessor.plantuml'
+      # }
+      # {
+      #   # TODO: escaped character
+      #   'match': '(")([^"]*)(")'
+      #   'captures':
+      #     '1':
+      #       'name': 'punctuation.definition.string.begin.plantuml'
+      #     '3':
+      #       'name': 'punctuation.definition.string.end.plantuml'
+      #   'name': 'string.quoted.double.plantuml'
+      # }
+      # {
+      #   'match': '(?x)\\b(?:
+      #       abstract
+      #       |actor
+      #       |agent
+      #       |artifact
+      #       |boundary
+      #       |card
+      #       |class
+      #       |cloud
+      #       |component
+      #       |control
+      #       |database
+      #       |entity
+      #       |enum
+      #       |folder
+      #       |frame
+      #       |interface
+      #       |node
+      #       |object
+      #       |participant
+      #       |rect
+      #       |state
+      #       |storage
+      #       |usecase
+      #       )\\b'
+      #   'name': 'entity.name.type.plantuml'
+      # }
+      # {
+      #   'match': '(?x)\\b(?:
+      #       activate
+      #       |again
+      #       |also
+      #       |alt
+      #       |as
+      #       |autonumber
+      #       |bottom
+      #       |box
+      #       |break
+      #       |center
+      #       |create
+      #       |critical
+      #       |deactivate
+      #       |destroy
+      #       |down
+      #       |else
+      #       |elseif
+      #       |end
+      #       |endif
+      #       |endwhile
+      #       |footbox
+      #       |footer
+      #       |fork
+      #       |group
+      #       |header
+      #       |hide
+      #       |if
+      #       |is
+      #       |left
+      #       |link
+      #       |loop
+      #       |namespace
+      #       |newpage
+      #       |note
+      #       |of
+      #       |on
+      #       |opt
+      #       |over
+      #       |package
+      #       |page
+      #       |par
+      #       |partition
+      #       |ref
+      #       |repeat
+      #       |return
+      #       |right
+      #       |rotate
+      #       |show
+      #       |skin
+      #       |skinparam
+      #       |start
+      #       |stop
+      #       |title
+      #       |top\\s+to\\s+bottom\\s+direction
+      #       |top
+      #       |up
+      #       |while
+      #       )\\b'
+      #   'name': 'keyword.control.plantuml'
+      # }
     ]
   'comments':
     'patterns': [
@@ -169,4 +172,64 @@
         'name': 'comment.block.plantuml'
       }
 
+    ]
+  'sequence_diagram':
+    'patterns': [
+      {
+        'match': '(?x)^\\s*
+            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
+            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?\\s*
+            ( (?:(?<=\\s)[ox])?
+              (?:<<?|\\\\\\\\?|//?)?
+              -(?:\\[(\\#\\w+)\\])?-?
+              (?:>>?|\\\\\\\\?|//?)?
+              (?:[ox](?=\\s))?
+            )\\s*
+            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
+            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?\\s*
+            (?:(:)(.*))?
+            \\s*$'
+        'captures':
+          '1':
+            'name': 'entity.name.type.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+          '3':
+            'name': 'entity.name.type.plantuml'
+          '4':
+            'name': 'keyword.operator.plantuml'
+          '5':
+            'name': 'constant.other.color.plantuml'
+          '6':
+            'name': 'entity.name.type.plantuml'
+          '7':
+            'name': 'keyword.control.plantuml'
+          '8':
+            'name': 'entity.name.type.plantuml'
+          '9':
+            'name': 'keyword.operator.plantuml'
+          '10':
+            'name': 'string.unquoted.plantuml'
+        'name': 'meta.sequence.arrow.plantuml'
+      }
+      {
+        'match': '(?x)^\\s*
+            (actor|boundary|control|entity|database|participant)\\s+
+            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
+            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?
+            (?:\\s+(\\#\\w+))?
+            \\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.type.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+          '4':
+            'name': 'entity.name.type.plantuml'
+          '5':
+            'name': 'constant.other.color.plantuml'
+        'name': 'meta.sequence.declaring.plantuml'
+      }
     ]
