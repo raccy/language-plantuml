@@ -10,15 +10,15 @@ Contents of PlatUML Language Reference Guid
     - [x] Basic examples
     - [x] Comments
     - [x] Declaring participant
-    - [ ] Use non-letters inparticipants
-    - [ ] Message to Self
-    - [ ] Change arrow style
-    - [ ] Change arrow color
-    - [ ] Message sequence numbering
-    - [ ] Title
-    - [ ] Legend the diagram
-    - [ ] Splitting diagrams
-    - [ ] Grouping message
+    - [x] Use non-letters inparticipants
+    - [x] Message to Self
+    - [x] Change arrow style
+    - [x] Change arrow color
+    - [x] Message sequence numbering
+    - [x] Title
+    - [x] Legend the diagram
+    - [x] Splitting diagrams
+    - [x] Grouping message
     - [ ] Notes on messages
     - [ ] Some other notes
     - [ ] Changing notes shape
@@ -53,9 +53,9 @@ Contents of PlatUML Language Reference Guid
     - [x] Relations between classes
     - [x] Label on relations
     - [x] Adding methods
-    - [ ] Defining visibility
-    - [ ] Abstract and Static
-    - [ ] Advanced class body
+    - [x] Defining visibility
+    - [x] Abstract and Static
+    - [x] Advanced class body
     - [ ] Notes and stereotypes
     - [ ] More on notes
     - [ ] Note on links

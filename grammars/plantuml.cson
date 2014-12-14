@@ -3,19 +3,19 @@
 'fileTypes': [
   'txt'
 ]
-'fileLineMatch': '^@startuml'
+'firstLineMatch': '^@startuml'
 'patterns': [
   {
     'begin': '^@startuml'
     'beginCaptures':
       '0':
-        'name': 'punctuation.section.documentation.begin.plantuml'
+        'name': 'punctuation.section.source.begin.plantuml'
     'contentName': 'source.plantuml'
     'end': '^@enduml'
     'endCaptures':
       '0':
-        'name': 'punctuation.section.documentation.end.plantuml'
-    'name': 'meta.documentation.block.plantuml'
+        'name': 'punctuation.section.sourec.end.plantuml'
+    'name': 'meta.source.block.plantuml'
     'patterns': [
       {
         'include': '#plantuml'
@@ -28,6 +28,47 @@
     'patterns': [
       {
         'include': '#comments'
+      }
+      {
+        'match': '^\\s*(skinparam)\\s+(\\S+)\\s+(.*)$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.tag.plantuml'
+          '3':
+            'name': 'constant.other.plantuml'
+        'name': 'meta.skinparam.plantuml'
+      }
+      {
+        'match': '^\\s*(title)\\s+(\\S.*)$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+        'name': 'meta.title.plantuml'
+      }
+      {
+        'begin': '^\\s*(legend)(?:\\s+(left|right|center))?$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.laguage.plantuml'
+        'end': '^\\s*(endlegend)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.legend.block.plantuml'
+        'contentName': 'comment.block.documentation.plantuml'
+      }
+      {
+        'match': '^\\s*(newpage)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.newpage.plantuml'
       }
       {
         'include': '#sequence_diagram'
@@ -85,7 +126,7 @@
               '0':
                 'name': 'punctuation.definition.comment.plantuml'
             'end': '\\n'
-            'name': 'comment.line.singlequote.pluantul'
+            'name': 'comment.line.singlequote.plantuml'
           }
         ]
       }
@@ -97,13 +138,96 @@
         'end': '\'/'
         'endCaptures':
           '0':
-            'name': 'punctuation.definition.comment.end.pluntuml'
+            'name': 'punctuation.definition.comment.end.plantuml'
         'name': 'comment.block.plantuml'
       }
 
     ]
   'sequence_diagram':
     'patterns': [
+      {
+        'match': '(?x)^\\s*
+            (autonumber)
+            (?:\\s+(\\d+)|\\s+("[^"]+"))?
+            (?:\\s+(\\d+)|\\s+("[^"]+"))?
+            (?:\\s+("[^"]+"))?
+            \\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'constant.numeric.plantuml'
+          '3':
+            'name': 'string.quoted.double.plantuml'
+          '4':
+            'name': 'constant.numeric.plantuml'
+          '5':
+            'name': 'string.quoted.double.plantuml'
+          '6':
+            'name': 'string.quoted.double.plantuml'
+        'name': 'meta.autonumber.plantuml'
+      }
+      {
+        'begin': '(?x)^\\s*
+            (alt)
+            (?:\\s+(.*))?\\s*
+            $'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+        'end': '^\\s*(end)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.sequence.group.plantuml'
+        'patterns': [
+          {
+            'match': '(?x)^\\s*
+                (else)
+                (?:\\s+(.*))?\\s*
+                $'
+            'captures':
+              '1':
+                'name': 'keyword.control.plantuml'
+              '2':
+                'name': 'string.unquoted.plantuml'
+          }
+          {
+            'include': '#sequence_diagram'
+          }
+        ]
+      }
+      {
+        'begin': '(?x)^\\s*
+            (?:
+                (opt|loop|par|break|critical)
+                (?:\\s+(.*))?
+            |
+                (group)\\s+(.*)
+            )\\s*
+            $'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+          '4':
+            'name': 'entity.name.section.plantuml'
+        'end': '^\\s*(end)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.sequence.group.plantuml'
+        'patterns': [
+          {
+            'include': '#sequence_diagram'
+          }
+        ]
+      }
       {
         'match': '(?x)^\\s*
             ([\\w\\u0080-\\uFFFF]+|"[^"]+")
@@ -147,7 +271,7 @@
             ([\\w\\u0080-\\uFFFF]+|"[^"]+")
             (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?
             (?:\\s+(<<)\\s*
-              (?:\\((.),(\\#\\w+)\\))?
+              (?:\\((.),(\\#?\\w+)\\))?
               (.*)
             \\s*(>>))?
             (?:\\s+(\\#\\w+))?
@@ -407,6 +531,23 @@
     ]
   'class_block':
     'patterns': [
+      {
+        'match': '(?x)^\\s*
+            (--+|\\.\\.+|==+|__+)\\s*
+            (?:
+                ([^-\\.=__]+)\\s*
+                (--+|\\.\\.+|==+|__+)\\s*
+            )?
+            $'
+        'captures':
+          '1':
+            'name': 'keyword.operator.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+          '3':
+            'name': 'keyword.operator.plantuml'
+        'name': 'meta.class.separator.plantuml'
+      }
       {
         'match': '(?x)^\\s*
             (-|\\#|~|\\+)?\\s*
