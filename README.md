@@ -50,9 +50,9 @@ Contents of PlatUML Language Reference Guid
     - [ ] Skinparam
     - [ ] Complete example
 - [ ] Class Diagram
-    - [ ] Relations between classes
-    - [ ] Label on relations
-    - [ ] Adding methods
+    - [x] Relations between classes
+    - [x] Label on relations
+    - [x] Adding methods
     - [ ] Defining visibility
     - [ ] Abstract and Static
     - [ ] Advanced class body
