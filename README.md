@@ -19,11 +19,11 @@ Contents of PlatUML Language Reference Guid
     - [x] Legend the diagram
     - [x] Splitting diagrams
     - [x] Grouping message
-    - [ ] Notes on messages
-    - [ ] Some other notes
-    - [ ] Changing notes shape
+    - [x] Notes on messages
+    - [x] Some other notes
+    - [x] Changing notes shape
     - [ ] Creole and HTML
-    - [ ] Divider
+    - [x] Divider
     - [ ] Reference
     - [ ] Delay
     - [ ] Space

@@ -50,7 +50,7 @@
         'name': 'meta.title.plantuml'
       }
       {
-        'begin': '^\\s*(legend)(?:\\s+(left|right|center))?$'
+        'begin': '^\\s*(legend)(?:\\s+(left|right|center))?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -61,7 +61,7 @@
           '1':
             'name': 'keyword.control.plantuml'
         'name': 'meta.legend.block.plantuml'
-        'contentName': 'comment.block.documentation.plantuml'
+        'contentName': 'string.unquoted.plantuml'
       }
       {
         'match': '^\\s*(newpage)\\s*$'
@@ -69,6 +69,66 @@
           '1':
             'name': 'keyword.control.plantuml'
         'name': 'meta.newpage.plantuml'
+      }
+      {
+        'begin': '(?x)^\\s*
+            ([hr]?note)\\s*
+            (?:
+              \\s+(left|right|left\\s+of|right\\s+of|over)
+              (?:\\s+
+                ([\\w\\u0080-\\uFFFF]+)
+                (\\s*,\\s*([\\w\\u0080-\\uFFFF]+))*
+              )?
+              (?:\\s+(\\#\\w+))?
+            )?\\s*
+            $'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.laguage.plantuml'
+          '3':
+            'name': 'entity.type.name.plantuml'
+          '5':
+            'name': 'entity.type.name.plantuml'
+          '6':
+            'name': 'constant.other.color.plantuml'
+        'end': '^\\s*(end\\s+[hr]?note|end[hr]note)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.note.block.plantuml'
+        'contentName': 'string.unquoted.plantuml'
+      }
+      {
+        'match': '(?x)^
+            ([hr]?note)\\s*
+            (?:
+              \\s+(left|right|left\\s+of|right\\s+of|over)
+              (?:\\s+
+                ([\\w\\u0080-\\uFFFF]+)
+                (\\s*,\\s*([\\w\\u0080-\\uFFFF]+))*
+              )?
+              (?:\\s+(\\#\\w+))?
+            )?\\s*
+            (:)\\s*(\\S.*)\\s*
+            $'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.laguage.plantuml'
+          '3':
+            'name': 'entity.type.name.plantuml'
+          '5':
+            'name': 'entity.type.name.plantuml'
+          '6':
+            'name': 'constant.other.color.plantuml'
+          '7':
+            'name': 'keyword.operator.plantuml'
+          '8':
+            'name': 'string.unquoted.plantuml'
+        'name': 'meta.note.line.plantuml'
       }
       {
         'include': '#sequence_diagram'
@@ -145,6 +205,21 @@
     ]
   'sequence_diagram':
     'patterns': [
+      {
+        'match': '(?x)^\\s*
+            (==+)\\s*
+            ([^=]+)\\s*
+            (==+)\\s*
+            $'
+        'captures':
+          '1':
+            'name': 'keyword.operator.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+          '3':
+            'name': 'keyword.operator.plantuml'
+        'name': 'meta.sequence.driver.plantuml'
+      }
       {
         'match': '(?x)^\\s*
             (autonumber)
