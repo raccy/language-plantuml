@@ -256,7 +256,7 @@
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
-        'name': 'meta.sequence.group.plantuml'
+        'name': 'meta.sequence.alt.plantuml'
         'patterns': [
           {
             'match': '(?x)^\\s*
@@ -270,7 +270,7 @@
                 'name': 'string.unquoted.plantuml'
           }
           {
-            'include': '#sequence_diagram'
+            'include': '#plantuml'
           }
         ]
       }
@@ -299,7 +299,7 @@
         'name': 'meta.sequence.group.plantuml'
         'patterns': [
           {
-            'include': '#sequence_diagram'
+            'include': '#plantuml'
           }
         ]
       }
