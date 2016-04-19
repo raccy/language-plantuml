@@ -55,7 +55,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.laguage.plantuml'
+            'name': 'variable.language.plantuml'
         'end': '^\\s*(endlegend)\\s*$'
         'endCaptures':
           '1':
@@ -86,7 +86,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.laguage.plantuml'
+            'name': 'variable.language.plantuml'
           '3':
             'name': 'entity.type.name.plantuml'
           '5':
@@ -117,7 +117,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.laguage.plantuml'
+            'name': 'variable.language.plantuml'
           '3':
             'name': 'entity.type.name.plantuml'
           '5':
@@ -275,24 +275,72 @@
         ]
       }
       {
+        'begin': '(?x)^\\s*(box)\\s+(.*)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.quoted.plantuml'
+        'end': '^\\s*(end box)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.sequence.box.plantuml'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
+        'begin': '(?x)^\\s*(loop)(?:\\s+(.*)\\s+(times))?\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.language.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(end(?:\\s+loop)?)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'name': 'meta.sequence.loop.plantuml'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
         'begin': '(?x)^\\s*
-            (?:
-                (opt|loop|par|break|critical)
-                (?:\\s+(.*))?
-            |
-                (group)\\s+(.*)
-            )\\s*
-            $'
+                    (opt|loop|par|break|critical)
+                    (?:\\s+(.*))?
+                  \\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
             'name': 'string.unquoted.plantuml'
-          '3':
+        'end': '^\\s*(end(?:\\s+\\1)?)\\s*$'
+        'endCaptures':
+          '1':
             'name': 'keyword.control.plantuml'
-          '4':
-            'name': 'entity.name.section.plantuml'
-        'end': '^\\s*(end)\\s*$'
+        'name': 'meta.sequence.groupalt.plantuml'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
+        'begin': '(?x)^\\s*(group)\\s+(.*)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.unquoted.plantuml'
+        'end': '^\\s*(end(?:\\s+\\1)?)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -305,46 +353,9 @@
       }
       {
         'match': '(?x)^\\s*
-            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
-            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?\\s*
-            ( (?:(?<=\\s)[ox])?
-              (?:<<?|\\\\\\\\?|//?)?
-              -(?:\\[(\\#\\w+)\\])?-?
-              (?:>>?|\\\\\\\\?|//?)?
-              (?:[ox](?=\\s))?
-            )\\s*
-            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
-            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?\\s*
-            (?:(:)(.*))?
-            \\s*$'
-        'captures':
-          '1':
-            'name': 'entity.name.type.plantuml'
-          '2':
-            'name': 'keyword.control.plantuml'
-          '3':
-            'name': 'entity.name.type.plantuml'
-          '4':
-            'name': 'keyword.operator.plantuml'
-          '5':
-            'name': 'constant.other.color.plantuml'
-          '6':
-            'name': 'entity.name.type.plantuml'
-          '7':
-            'name': 'keyword.control.plantuml'
-          '8':
-            'name': 'entity.name.type.plantuml'
-          '9':
-            'name': 'punctuation.definition.description.plantuml'
-          '10':
-            'name': 'string.unquoted.plantuml'
-        'name': 'meta.sequence.arrow.plantuml'
-      }
-      {
-        'match': '(?x)^\\s*
             (actor|boundary|control|entity|database|participant)\\s+
-            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
-            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+))?
+            (?:([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s+(as))?
+            \\s+([\\w\\u0080-\\uFFFF]+|"[^"]+")
             (?:\\s+(<<)\\s*
               (?:\\((.),(\\#?\\w+)\\))?
               (.*)
@@ -373,6 +384,40 @@
           '10':
             'name': 'constant.other.color.plantuml'
         'name': 'meta.sequence.declaring.plantuml'
+      }
+      {
+        'match': '(?x)^\\s*((?:de)?activate)\\s+(.*)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.type.plantuml'
+        'name': 'meta.sequence.activate.plantuml'
+      }
+      {
+        'match': '(?x)^\\s*
+            ([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s*
+            ([ox]?(?:<<?|//?|\\\\\\\\?)?--?(?:>>?|//?|\\\\\\\\?)?[ox]?)\\s*
+            ([\\w\\u0080-\\uFFFF]+|"[^"]+")
+            (?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+|"[^"]+"))?\\s*
+            (:)\\s*
+            (.*)$'
+        'captures':
+          '1':
+            'name': 'entity.name.type.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+          '3':
+            'name': 'entity.name.type.plantuml'
+          '4':
+            'name': 'keyword.control.plantuml'
+          '5':
+            'name': 'entity.name.type.plantuml'
+          '6':
+            'name': 'constant.other.color.plantuml'
+          '7':
+            'name': 'string.unquoted.plantuml'
+        'name': 'meta.sequence.arrow.plantuml'
       }
     ]
   # TODO: implement usecase_diagram
