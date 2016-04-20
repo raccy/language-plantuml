@@ -18,6 +18,7 @@ grammar =
                 (?:[ox](?=[\s\]"]))?
                 ///
     stringQuoted: /{entityQuoted}/
+    participant: /(?:actor|boundary|control|entity|database|participant)/
 
   firstLineMatch: '^@startuml'
   patterns: [
@@ -81,8 +82,8 @@ grammar =
               (?:
                 \s+((?:left|right)(?:\s+of)|over)
                 (?:\s+
-                  ([\w\u0080-\uFFFF]+)
-                  (\s*,\s*([\w\u0080-\uFFFF]+))*
+                  ({entity})
+                  (\s*,\s*({entity}))*
                 )?
                 (?:\s+({color}))?
               )?\s*
@@ -104,10 +105,10 @@ grammar =
           match: ///^
               ([hr]?note)\s*
               (?:
-                \s+(left|right|left\s+of|right\s+of|over)
+                \s+((?:left|right)(?:\s+of)|over)
                 (?:\s+
-                  ([\w\u0080-\uFFFF]+)
-                  (\s*,\s*([\w\u0080-\uFFFF]+))*
+                  ({entity})
+                  (\s*,\s*({entity}))*
                 )?
                 (?:\s+({color}))?
               )?\s*
@@ -318,14 +319,14 @@ grammar =
           name: 'meta.sequence.declaring'
           match: ///^\s*
               (
-                create(?:\s+(?:actor|boundary|control|entity|database|participant))?
+                create(?:\s+{participant})?
                 |
-                (?:actor|boundary|control|entity|database|participant)
+                {participant}
               )\s+
-              (?:([\w\u0080-\uFFFF]+|"[^"]+")\s+(as))?
-              \s+([\w\u0080-\uFFFF]+|"[^"]+")
+              (?:({entity})\s+(as))?
+              \s+({entity})
               (?:\s+(<<)\s*
-                (?:\((.),(\#?\w+)\))?
+                (?:\((.),({color})\))?
                 (.*)
               \s*(>>))?
               (?:\s+({color}))?
@@ -419,6 +420,20 @@ grammar =
             '6': { name: 'entity.name.type' }
             '7': { name: 'constant.other.color' }
             '8': { name: 'string.unquoted' }
+        }
+        {
+          name: 'meta.sequence.verticalspace'
+          match: ///^\s*
+                (?:
+                  (\|{3})
+                  |
+                  (\|\|(\d+)\|\|)
+                )\s*$
+                ///
+          captures:
+            '1': { name: 'keyword.control' }
+            '2': { name: 'keyword.control' }
+            '3': { name: 'variable.language' }
         }
       ]
     # TODO: implement usecase_diagram

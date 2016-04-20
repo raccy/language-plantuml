@@ -1,11 +1,14 @@
 @startuml
+  hide footbox
   title test
   participant A as "nonono"
   participant B as "toto"
   A -> B: ok!
   A o-[#555]->x"xB": hello
+  |||
   create actor test as "test"
   test ->]: nono!
+  ||55||
   activate test #ccc
   deactivate test
   [->x "tust": ""maybe""
