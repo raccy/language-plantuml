@@ -1,0 +1,13 @@
+@startuml
+  title test
+  participant A as "nonono"
+  participant B as "toto"
+  A -> B: ok!
+  A o-[#555]->x"xB": hello
+  create actor test as "test"
+  test ->]: nono!
+  activate test #ccc
+  deactivate test
+  [->x "tust": ""maybe""
+  tust x<-o]: okk
+@enduml

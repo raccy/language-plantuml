@@ -6,16 +6,18 @@ grammar =
   fileTypes: [ "puml", "plantuml", "txt" ]
 
   macros:
-    # for demonstartion purpose, how to use regexes as macros
-    hexdigit: /[0-9a-fA-F]/
+    color: /\#\w+/
     entityName: /[\w\u0080-\uFFFF]+/
     entityQuoted: /"[^"]+"/
+    entity: /(?:{entityName}|{entityQuoted})/
+    arrowColor: ///
+                [ox]?
+                (?:<<?|\\\\?|//?)?
+                -(?:\[({color})\])?-?
+                (?:>>?|\\\\?|//?)?
+                (?:[ox](?=[\s\]"]))?
+                ///
     stringQuoted: /{entityQuoted}/
-
-    en: "entity.name"
-    pd: "punctuation.definition"
-    ps: "punctuation.separator"
-    ii: "invalid.illegal"
 
   firstLineMatch: '^@startuml'
   patterns: [
@@ -82,7 +84,7 @@ grammar =
                   ([\w\u0080-\uFFFF]+)
                   (\s*,\s*([\w\u0080-\uFFFF]+))*
                 )?
-                (?:\s+(\#\w+))?
+                (?:\s+({color}))?
               )?\s*
               $
               ///
@@ -107,7 +109,7 @@ grammar =
                   ([\w\u0080-\uFFFF]+)
                   (\s*,\s*([\w\u0080-\uFFFF]+))*
                 )?
-                (?:\s+(\#\w+))?
+                (?:\s+({color}))?
               )?\s*
               (:)\s*(\S.*)\s*
               $
@@ -326,7 +328,7 @@ grammar =
                 (?:\((.),(\#?\w+)\))?
                 (.*)
               \s*(>>))?
-              (?:\s+(\#\w+))?
+              (?:\s+({color}))?
               \s*$///
           captures:
             '1': { name: 'keyword.control' }
@@ -342,47 +344,81 @@ grammar =
         }
         {
           name: 'meta.sequence.activate'
-          match: /^\s*((?:de)?activate)\s+(.*)\s*$/
+          match: /^\s*(activate)\s+({entity})(?:\s+({color}))?\s*$/
+          captures:
+            '1': { name: 'keyword.control' }
+            '2': { name: 'entity.name.type' }
+            '3': { name: 'constant.other.color' }
+        }
+        {
+          name: 'meta.sequence.deactivate'
+          match: /^\s*(deactivate)\s+(.*)\s*$/
           captures:
             '1': { name: 'keyword.control' }
             '2': { name: 'entity.name.type' }
         }
         {
-          name: 'meta.sequence.arrow'
+          name: 'meta.sequence.arrow.incoming'
           match: ///
                 ^\s*
-                (?:
-                  ([\w\u0080-\uFFFF]+|"[^"]+")\s*
-                  |
-                  (\[)
-                )
-                (
-                  (?:[ox])?
-                  (?:<<?|\\\\?|//?)?
-                  -(?:\[(\#\w+)\])?-?
-                  (?:>>?|\\\\?|//?)?
-                  (?:[ox](?=\]|\s))?
-                )
-                (?:
-                  (\])
-                  |
-                  \s*([\w\u0080-\uFFFF]+|"[^"]+")
-                  (?:\s+(as)\s+([\w\u0080-\uFFFF]+|"[^"]+"))?
-                )\s*
+                (\[)
+                ({arrowColor})\s*
+                ({entity})
+                (?:\s+(as)\s+({entity}))?\s*
+                (:)\s*
+                (.*)$
+                ///
+          patterns: [
+            { include: 'sequence_arrow' }
+          ]
+          captures:
+            '1': { name: 'meta.class.incoming' }
+            '2': { name: 'meta.class.arrow' }
+            '3': { name: 'constant.other.color' }
+            '4': { name: 'entity.name.type' }
+            '5': { name: 'keyword.control' }
+            '6': { name: 'entity.name.type' }
+            '7': { name: 'constant.other.color' }
+            '8': { name: 'string.unquoted' }
+        }
+        {
+          name: 'meta.sequence.arrow.outgoing'
+          match: ///
+                ^\s*
+                ({entity})\s*
+                ({arrowColor})
+                (\])\s*
                 (:)\s*
                 (.*)$
                 ///
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'meta.class.bracket.left' }
-            '3': { name: 'meta.class.arrow' }
-            '4': { name: 'constant.other.color' }
-            '5': { name: 'meta.class.bracket.right' }
+            '1': { name: 'entity.name.type' }
+            '2': { name: 'meta.class.arrow' }
+            '3': { name: 'constant.other.color' }
+            '4': { name: 'meta.class.outgoing' }
+            '5': { name: 'constant.other.color' }
+            '6': { name: 'string.unquoted' }
+        }
+        {
+          name: 'meta.sequence.arrow'
+          match: ///
+                ^\s*
+                ({entity})\s*
+                ({arrowColor})\s*
+                ({entity})
+                (?:\s+(as)\s+({entity}))?\s*
+                (:)\s*
+                (.*)$
+                ///
+          captures:
+            '1': { name: 'entity.name.type' }
+            '2': { name: 'meta.class.arrow' }
+            '3': { name: 'constant.other.color' }
+            '4': { name: 'entity.name.type' }
+            '5': { name: 'keyword.control' }
             '6': { name: 'entity.name.type' }
-            '7': { name: 'keyword.control' }
-            '8': { name: 'entity.name.type' }
-            '9': { name: 'constant.other.color' }
-            '10': { name: 'string.unquoted' }
+            '7': { name: 'constant.other.color' }
+            '8': { name: 'string.unquoted' }
         }
       ]
     # TODO: implement usecase_diagram
@@ -426,7 +462,7 @@ grammar =
                   (?:\((.),(\#?\w+)\))?\s*
                   ([^<>\(\)]+)?\s*
               (>>))?
-              (?:\s+(\#\w+))?
+              (?:\s+({color}))?
               \s*$///
           captures:
             '1': { name: 'keyword.control' }
@@ -450,7 +486,7 @@ grammar =
                   (?:\((.),(\#?\w+)\))?\s*
                   ([^<>\(\)]+)?\s*
               (>>))?
-              (?:\s+(\#\w+))?
+              (?:\s+({color}))?
               \s*({)\s*$///
           beginCaptures:
             '1': { name: 'keyword.control' }

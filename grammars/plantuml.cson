@@ -321,7 +321,18 @@
       }
       {
         'name': 'meta.sequence.activate.plantuml'
-        'match': '^\\s*((?:de)?activate)\\s+(.*)\\s*$'
+        'match': '^\\s*(activate)\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(\\#\\w+))?\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.type.plantuml'
+          '3':
+            'name': 'constant.other.color.plantuml'
+      }
+      {
+        'name': 'meta.sequence.deactivate.plantuml'
+        'match': '^\\s*(deactivate)\\s+(.*)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -329,28 +340,67 @@
             'name': 'entity.name.type.plantuml'
       }
       {
-        'name': 'meta.sequence.arrow.plantuml'
-        'match': '^\\s*(?:([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s*|(\\[))((?:[ox])?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=\\]|\\s))?)(?:(\\])|\\s*([\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+|"[^"]+"))?)\\s*(:)\\s*(.*)$'
+        'name': 'meta.sequence.arrow.incoming.plantuml'
+        'match': '^\\s*(\\[)([ox]?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=[\\s\\]"]))?)\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(as)\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))?\\s*(:)\\s*(.*)$'
+        'patterns': [
+          {
+            'include': 'sequence_arrow'
+          }
+        ]
         'captures':
           '1':
-            'name': 'keyword.control.plantuml'
+            'name': 'meta.class.incoming.plantuml'
           '2':
-            'name': 'meta.class.bracket.left.plantuml'
-          '3':
             'name': 'meta.class.arrow.plantuml'
-          '4':
+          '3':
             'name': 'constant.other.color.plantuml'
+          '4':
+            'name': 'entity.name.type.plantuml'
           '5':
-            'name': 'meta.class.bracket.right.plantuml'
+            'name': 'keyword.control.plantuml'
           '6':
             'name': 'entity.name.type.plantuml'
           '7':
-            'name': 'keyword.control.plantuml'
-          '8':
-            'name': 'entity.name.type.plantuml'
-          '9':
             'name': 'constant.other.color.plantuml'
-          '10':
+          '8':
+            'name': 'string.unquoted.plantuml'
+      }
+      {
+        'name': 'meta.sequence.arrow.outgoing.plantuml'
+        'match': '^\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s*([ox]?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=[\\s\\]"]))?)(\\])\\s*(:)\\s*(.*)$'
+        'captures':
+          '1':
+            'name': 'entity.name.type.plantuml'
+          '2':
+            'name': 'meta.class.arrow.plantuml'
+          '3':
+            'name': 'constant.other.color.plantuml'
+          '4':
+            'name': 'meta.class.outgoing.plantuml'
+          '5':
+            'name': 'constant.other.color.plantuml'
+          '6':
+            'name': 'string.unquoted.plantuml'
+      }
+      {
+        'name': 'meta.sequence.arrow.plantuml'
+        'match': '^\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s*([ox]?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=[\\s\\]"]))?)\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(as)\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))?\\s*(:)\\s*(.*)$'
+        'captures':
+          '1':
+            'name': 'entity.name.type.plantuml'
+          '2':
+            'name': 'meta.class.arrow.plantuml'
+          '3':
+            'name': 'constant.other.color.plantuml'
+          '4':
+            'name': 'entity.name.type.plantuml'
+          '5':
+            'name': 'keyword.control.plantuml'
+          '6':
+            'name': 'entity.name.type.plantuml'
+          '7':
+            'name': 'constant.other.color.plantuml'
+          '8':
             'name': 'string.unquoted.plantuml'
       }
     ]
