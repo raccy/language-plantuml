@@ -352,7 +352,7 @@ grammar =
         }
         {
           name: 'meta.sequence.deactivate'
-          match: /^\s*(deactivate)\s+(.*)\s*$/
+          match: /^\s*(deactivate|destroy)\s+(.*)\s*$/
           captures:
             '1': { name: 'keyword.control' }
             '2': { name: 'entity.name.type' }
