@@ -24,12 +24,12 @@ Contents of PlatUML Language Reference Guid
     - [x] Changing notes shape
     - [ ] Creole and HTML
     - [x] Divider
-    - [ ] Reference
+    - [X] Reference
     - [ ] Delay
-    - [ ] Space
-    - [ ] Lifeline Activation and Destruction
-    - [ ] Participant creation
-    - [ ] Incoming and outgoing messages
+    - [X] Space
+    - [X] Lifeline Activation and Destruction
+    - [X] Participant creation
+    - [X] Incoming and outgoing messages
     - [ ] Stereotypes and Spots
     - [ ] More information on titles
     - [ ] Participants encompass

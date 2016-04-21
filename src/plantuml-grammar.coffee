@@ -15,7 +15,7 @@ grammar =
     entityName: /[\w\u0080-\uFFFF]+/
     entityQuoted: /"[^"]+"/
     entity: /(?:{entityName}|{entityQuoted})/
-    entity_name: 'variable'
+    entity_name: 'meta.class'
     integer: /(?:[1-9][0-9]*)/
     number: /(?:{integer}|\d+(?:\.\d+)?)/
     number_name: 'constant.numeric'
@@ -31,7 +31,7 @@ grammar =
                   |
                   -(?:d|do|down|u|up|r|ri|right|l|le|left)?->
                 )///
-    arrow_name: 'meta.class.arrow'
+    arrow_name: 'entity.name.function'
     stringQuoted: /{entityQuoted}/
     string_name: 'string'
     participant: /(?:actor|boundary|control|entity|database|participant)/
@@ -213,7 +213,7 @@ grammar =
         #       name: 'punctuation.definition.string.begin'
         #     '3':
         #       name: 'punctuation.definition.string.end'
-        #   name: 'string.quoted.double'
+        #   name: '{string_name}.double'
         # }
       ]
     'comments':
@@ -247,7 +247,7 @@ grammar =
     'sequence_diagram':
       patterns: [
         {
-          name: 'meta.sequence.driver'
+          name: 'meta.sequence.divider'
           match: ///
               ^\s*
               (==+)\s*
@@ -255,9 +255,22 @@ grammar =
               (==+)\s*
               $///
           captures:
-            '1': { name: 'keyword.operator' }
+            '1': { name: '{punct_name}' }
             '2': { name: '{string_name}' }
-            '3': { name: 'keyword.operator' }
+            '3': { name: '{punct_name}' }
+        }
+        {
+          name: 'meta.sequence.delay'
+          match: ///
+              ^\s*
+              (\.{3})\s*
+              (.*)\s*
+              (\.{3})\s*
+              $///
+          captures:
+            '1': { name: '{punct_name}' }
+            '2': { name: '{string_name}' }
+            '3': { name: '{punct_name}' }
         }
         {
           name: 'meta.autonumber'
@@ -270,10 +283,37 @@ grammar =
           captures:
             '1': { name: '{keyword_name}' }
             '2': { name: 'constant.numeric' }
-            '3': { name: 'string.quoted.double' }
+            '3': { name: '{string_name}.double' }
             '4': { name: 'constant.numeric' }
-            '5': { name: 'string.quoted.double' }
-            '6': { name: 'string.quoted.double' }
+            '5': { name: '{string_name}.double' }
+            '6': { name: '{string_name}.double' }
+        }
+        {
+          name: 'meta.sequence.ref.line'
+          match: ///^\s*
+            (ref\s+over)\s+
+            ({entity}(?:\s*,\s*{entity})*)\s*
+            (:)\s*
+            (.*)\s*$///
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.sequence.ref.block'
+          begin: ///^\s*
+            (ref\s+over)\s+
+            ({entity}(?:\s*(,)\s*{entity})*)\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{punct_name}' }
+          end: /^\s*(end\s+ref)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
         }
         {
           name: 'meta.sequence.alt'
@@ -307,7 +347,7 @@ grammar =
           begin: /^\s*(box)\s+(.*)\s*$/
           beginCaptures:
             '1': { name: '{keyword_name}' }
-            '2': { name: 'string.quoted' }
+            '2': { name: '{string_name}' }
           end: /^\s*(end\s+box)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
@@ -482,8 +522,8 @@ grammar =
                 )\s*$
                 ///
           captures:
-            '1': { name: '{keyword_name}' }
-            '2': { name: '{keyword_name}' }
+            '1': { name: '{punct_name}' }
+            '2': { name: '{punct_name}' }
             '3': { name: '{number_name}' }
         }
       ]
@@ -657,7 +697,7 @@ grammar =
     'state_diagram_start':
       patterns: [
         {
-          name: 'meta.state.start'
+          name: 'meta.state.start.arrow'
           begin: ///^\s*
               ({stateSource})\s*
               ({arrowState})\s*
@@ -670,6 +710,19 @@ grammar =
             '3': { name: '{entity_name}' }
             '4': { name: '{punct_name}' }
             '5': { name: '{string_name}' }
+          end: /(?=@enduml)/
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#state_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.state.start.declaring'
+          begin: /(?=^\s*state\s+)/
           end: /(?=@enduml)/
           patterns: [
             {
@@ -699,6 +752,20 @@ grammar =
             '5': { name: '{other_name}' }
             '6': { name: '{punct_name}' }
             '7': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.state.comment'
+          match: /^\s*({entity})\s*(:)\s*(.*)\s*$/
+          captures:
+            '1': { name: '{entity_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.state.comment'
+          match: /^\s*(--|\|\|)\s*$/
+          captures:
+            '1': { name: '{punct_name}' }
         }
         {
           name: 'meta.state.declaring.block'
