@@ -25,14 +25,14 @@ Contents of PlatUML Language Reference Guid
     - [ ] Creole and HTML
     - [x] Divider
     - [X] Reference
-    - [ ] Delay
+    - [X] Delay
     - [X] Space
     - [X] Lifeline Activation and Destruction
     - [X] Participant creation
     - [X] Incoming and outgoing messages
     - [ ] Stereotypes and Spots
     - [ ] More information on titles
-    - [ ] Participants encompass
+    - [X] Participants encompass
     - [ ] Removing Footer
     - [ ] Skinparam
 - [ ] Use Case Diagram
@@ -119,12 +119,12 @@ Contents of PlatUML Language Reference Guid
     - [ ] Use UML2 notation
     - [ ] Skinparam
 - [ ] State Diagram
-    - [ ] Simple State
-    - [ ] Composite state
-    - [ ] Long name
-    - [ ] Concurrent state
-    - [ ] Arrow direction
-    - [ ] Note
+    - [X] Simple State
+    - [X] Composite state
+    - [X] Long name
+    - [X] Concurrent state
+    - [X] Arrow direction
+    - [X] Note
     - [ ] More in notes
     - [ ] Skinparam
 - [ ] Object Diagram

@@ -94,11 +94,21 @@ grammar =
             '3': { name: 'constant.other' }
         }
         {
-          name: 'meta.title'
+          name: 'meta.title.line'
           match: /^\s*(title)\s+(\S.*)$/
           captures:
             '1': { name: '{keyword_name}' }
             '2': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.title.block'
+          begin: /^\s*(title)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(end\s*title)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
         }
         {
           name: 'meta.legend.block'
@@ -106,7 +116,7 @@ grammar =
           beginCaptures:
             '1': { name: '{keyword_name}' }
             '2': { name: '{number_name}' }
-          end: /^\s*(endlegend)\s*$/
+          end: /^\s*(end\s*legend)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           contentName: '{string_name}'
@@ -124,7 +134,7 @@ grammar =
               ^\s*
               ([hr]?note)\s*
               (?:
-                \s+((?:left|right)(?:\s+of)|over)
+                \s+((?:left|right)(?:\s+of)?|over)
                 (?:\s+
                   ({entity})
                   (\s*,\s*({entity}))*
@@ -139,7 +149,7 @@ grammar =
             '3': { name: '{entity_name}' }
             '5': { name: '{entity_name}' }
             '6': { name: '{color_name}' }
-          end: /^\s*(end\s+[hr]?note|end[hr]note)\s*$/
+          end: /^\s*(end\s*\1)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           contentName: '{string_name}'
@@ -149,10 +159,9 @@ grammar =
           match: ///^
               ([hr]?note)\s*
               (?:
-                \s+((?:left|right)(?:\s+of)|over)
+                \s+((?:left|right)(?:\s+of)?|over)
                 (?:\s+
-                  ({entity})
-                  (\s*,\s*({entity}))*
+                  ({entity}(?:\s*,\s*{entity})*)
                 )?
                 (?:\s+({color}))?
               )?\s*
@@ -161,12 +170,25 @@ grammar =
               ///
           captures:
             '1': { name: '{keyword_name}' }
-            '2': { name: '{number_name}' }
+            '2': { name: '{other_name}' }
             '3': { name: '{entity_name}' }
             '5': { name: '{entity_name}' }
             '6': { name: '{color_name}' }
             '7': { name: '{punct_name}' }
             '8': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.note.floating'
+          match: ///^
+              ([hr]?note)\s+
+              ({entityQuoted})\s+
+              (as)\s+
+              ({entityName})\s*$///
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
         }
       ]
 
@@ -310,7 +332,7 @@ grammar =
             '1': { name: '{keyword_name}' }
             '2': { name: '{entity_name}' }
             '3': { name: '{punct_name}' }
-          end: /^\s*(end\s+ref)\s*$/
+          end: /^\s*(end(?:\s*ref)?)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           contentName: '{string_name}'
@@ -348,7 +370,7 @@ grammar =
           beginCaptures:
             '1': { name: '{keyword_name}' }
             '2': { name: '{string_name}' }
-          end: /^\s*(end\s+box)\s*$/
+          end: /^\s*(end\s*box)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           patterns: [
@@ -364,7 +386,7 @@ grammar =
             '1': { name: '{keyword_name}' }
             '2': { name: '{number_name}' }
             '3': { name: '{keyword_name}' }
-          end: /^\s*(end(?:\s+loop)?)\s*$/
+          end: /^\s*(end(?:\s*loop)?)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           patterns: [

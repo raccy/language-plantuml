@@ -68,13 +68,25 @@
             'name': 'constant.other.plantuml'
       }
       {
-        'name': 'meta.title.plantuml'
+        'name': 'meta.title.line.plantuml'
         'match': '^\\s*(title)\\s+(\\S.*)$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
             'name': 'string.plantuml'
+      }
+      {
+        'name': 'meta.title.block.plantuml'
+        'begin': '^\\s*(title)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(end\\s*title)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'contentName': 'string.plantuml'
       }
       {
         'name': 'meta.legend.block.plantuml'
@@ -84,7 +96,7 @@
             'name': 'keyword.control.plantuml'
           '2':
             'name': 'constant.numeric.plantuml'
-        'end': '^\\s*(endlegend)\\s*$'
+        'end': '^\\s*(end\\s*legend)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -101,7 +113,7 @@
       }
       {
         'name': 'meta.note.block.plantuml'
-        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*$'
+        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -113,7 +125,7 @@
             'name': 'meta.class.plantuml'
           '6':
             'name': 'constant.other.color.plantuml'
-        'end': '^\\s*(end\\s+[hr]?note|end[hr]note)\\s*$'
+        'end': '^\\s*(end\\s*\\1)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -121,12 +133,12 @@
       }
       {
         'name': 'meta.note.line.plantuml'
-        'match': '^([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
+        'match': '^([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s*,\\s*(?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))*))?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'constant.numeric.plantuml'
+            'name': 'constant.plantuml'
           '3':
             'name': 'meta.class.plantuml'
           '5':
@@ -137,6 +149,19 @@
             'name': 'punctuation.plantuml'
           '8':
             'name': 'string.plantuml'
+      }
+      {
+        'name': 'meta.note.floating.plantuml'
+        'match': '^([hr]?note)\\s+("[^"]+")\\s+(as)\\s+([\\w\\u0080-\\uFFFF]+)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+          '4':
+            'name': 'meta.class.plantuml'
       }
     ]
   'plantuml':
@@ -261,7 +286,7 @@
             'name': 'meta.class.plantuml'
           '3':
             'name': 'punctuation.plantuml'
-        'end': '^\\s*(end\\s+ref)\\s*$'
+        'end': '^\\s*(end(?:\\s*ref)?)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -301,7 +326,7 @@
             'name': 'keyword.control.plantuml'
           '2':
             'name': 'string.plantuml'
-        'end': '^\\s*(end\\s+box)\\s*$'
+        'end': '^\\s*(end\\s*box)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -321,7 +346,7 @@
             'name': 'constant.numeric.plantuml'
           '3':
             'name': 'keyword.control.plantuml'
-        'end': '^\\s*(end(?:\\s+loop)?)\\s*$'
+        'end': '^\\s*(end(?:\\s*loop)?)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'

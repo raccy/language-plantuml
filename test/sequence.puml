@@ -1,10 +1,13 @@
 @startuml
   hide footbox
-  title test
+  title
+    Sequence diagram title
+    on several lines
+  end title
   participant A as "nonono"
   participant B as "toto"
   A -> B: ok!
-  A o-[#555]->x"xB": hello
+  A o-[#555]->x "xB": hello
   |||
   create actor test as "test"
   test ->]: nono!
@@ -13,6 +16,9 @@
   deactivate test
   [->x "tust": ""maybe""
   tust x<-o]: okk
+  note left
+    This is **bold**
+  end note
 @enduml
 
 @startuml
