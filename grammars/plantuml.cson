@@ -3,21 +3,23 @@
   'plantuml'
   'txt'
 ]
-'firstLineMatch': '^@startuml'
+'firstLineMatch': '^\\s*@startuml'
 'name': 'PlantUML'
 'scopeName': 'source.plantuml'
 'patterns': [
   {
     'name': 'meta.source.block.plantuml'
-    'begin': '^@startuml'
+    'begin': '^\\s*(@startuml)(?:\\s+(.*))\\s*$'
     'beginCaptures':
-      '0':
-        'name': 'punctuation.section.source.begin.plantuml'
+      '1':
+        'name': 'constant.plantuml'
+      '2':
+        'name': 'string.other.link.plantuml'
     'contentName': 'source.plantuml'
-    'end': '^@enduml'
+    'end': '^\\s*@enduml'
     'endCaptures':
       '0':
-        'name': 'punctuation.section.sourec.end.plantuml'
+        'name': 'constant.plantuml'
     'patterns': [
       {
         'include': '#plantuml'
@@ -26,10 +28,33 @@
   }
 ]
 'repository':
-  'plantuml':
+  'common':
     'patterns': [
       {
         'include': '#comments'
+      }
+      {
+        'name': 'meta.scale.plantuml'
+        'match': '^\\s*(scale)\\s+(max\\s+)?(?:((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?))(?:(/)((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?)))?(?:\\s+(width|height))?|((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?))(\\*)((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?)))\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+          '3':
+            'name': 'constant.numeric.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+          '5':
+            'name': 'constant.numeric.plantuml'
+          '6':
+            'name': 'keyword.control.plantuml'
+          '7':
+            'name': 'constant.numeric.plantuml'
+          '8':
+            'name': 'punctuation.plantuml'
+          '9':
+            'name': 'constant.numeric.plantuml'
       }
       {
         'name': 'meta.skinparam.plantuml'
@@ -49,7 +74,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
       }
       {
         'name': 'meta.legend.block.plantuml'
@@ -58,58 +83,66 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.language.plantuml'
+            'name': 'constant.numeric.plantuml'
         'end': '^\\s*(endlegend)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
-        'contentName': 'string.unquoted.plantuml'
+        'contentName': 'string.plantuml'
       }
       {
         'name': 'meta.newpage.plantuml'
-        'match': '^\\s*(newpage)\\s*$'
+        'match': '^\\s*(newpage)(?:\\s+(.*)?)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.plantuml'
       }
       {
         'name': 'meta.note.block.plantuml'
-        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)|over)(?:\\s+([\\w\\u0080-\\uFFFF]+)(\\s*,\\s*([\\w\\u0080-\\uFFFF]+))*)?(?:\\s+(\\#\\w+))?)?\\s*$'
+        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.language.plantuml'
+            'name': 'constant.numeric.plantuml'
           '3':
-            'name': 'entity.type.name.plantuml'
+            'name': 'variable.plantuml'
           '5':
-            'name': 'entity.type.name.plantuml'
+            'name': 'variable.plantuml'
           '6':
             'name': 'constant.other.color.plantuml'
         'end': '^\\s*(end\\s+[hr]?note|end[hr]note)\\s*$'
         'endCaptures':
           '1':
             'name': 'keyword.control.plantuml'
-        'contentName': 'string.unquoted.plantuml'
+        'contentName': 'string.plantuml'
       }
       {
         'name': 'meta.note.line.plantuml'
-        'match': '^([hr]?note)\\s*(?:\\s+(left|right|left\\s+of|right\\s+of|over)(?:\\s+([\\w\\u0080-\\uFFFF]+)(\\s*,\\s*([\\w\\u0080-\\uFFFF]+))*)?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
+        'match': '^([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.language.plantuml'
+            'name': 'constant.numeric.plantuml'
           '3':
-            'name': 'entity.type.name.plantuml'
+            'name': 'variable.plantuml'
           '5':
-            'name': 'entity.type.name.plantuml'
+            'name': 'variable.plantuml'
           '6':
             'name': 'constant.other.color.plantuml'
           '7':
-            'name': 'keyword.operator.plantuml'
+            'name': 'punctuation.plantuml'
           '8':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
+      }
+    ]
+  'plantuml':
+    'patterns': [
+      {
+        'include': '#common'
       }
       {
         'include': '#sequence_diagram'
@@ -127,7 +160,7 @@
         'include': '#component_diagram'
       }
       {
-        'include': '#state_diagram'
+        'include': '#state_diagram_start'
       }
       {
         'include': '#object_diagram'
@@ -173,7 +206,7 @@
           '1':
             'name': 'keyword.operator.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
           '3':
             'name': 'keyword.operator.plantuml'
       }
@@ -201,7 +234,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
         'end': '^\\s*(end)\\s*$'
         'endCaptures':
           '1':
@@ -213,7 +246,7 @@
               '1':
                 'name': 'keyword.control.plantuml'
               '2':
-                'name': 'string.unquoted.plantuml'
+                'name': 'string.plantuml'
           }
           {
             'include': '#plantuml'
@@ -245,7 +278,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'variable.language.plantuml'
+            'name': 'constant.numeric.plantuml'
           '3':
             'name': 'keyword.control.plantuml'
         'end': '^\\s*(end(?:\\s+loop)?)\\s*$'
@@ -265,7 +298,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
         'end': '^\\s*(end(?:\\s+\\1)?)\\s*$'
         'endCaptures':
           '1':
@@ -283,7 +316,7 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
         'end': '^\\s*(end(?:\\s+\\1)?)\\s*$'
         'endCaptures':
           '1':
@@ -296,18 +329,18 @@
       }
       {
         'name': 'meta.sequence.declaring.plantuml'
-        'match': '^\\s*(create(?:\\s+(?:actor|boundary|control|entity|database|participant))?|(?:actor|boundary|control|entity|database|participant))\\s+(?:([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s+(as))?\\s+([\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s+(<<)\\s*(?:\\((.),(\\#?\\w+)\\))?(.*)\\s*(>>))?(?:\\s+(\\#\\w+))?\\s*$'
+        'match': '^\\s*(create(?:\\s+(?:actor|boundary|control|entity|database|participant))?|(?:actor|boundary|control|entity|database|participant))\\s+(?:((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s+(as)\\s+)?((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(<<)\\s*(?:\\((.),(\\#\\w+)\\))?(.*)\\s*(>>))?(?:\\s+(\\#\\w+))?\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '3':
             'name': 'keyword.control.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
-            'name': 'punctuation.definition.stereotype.begin.plantuml'
+            'name': 'punctuation.plantuml'
           '6':
             'name': 'constant.character.plantuml'
           '7':
@@ -315,7 +348,7 @@
           '8':
             'name': 'string.other.stereotype.plantuml'
           '9':
-            'name': 'punctuation.definition.stereotype.end.plantuml'
+            'name': 'punctuation.plantuml'
           '10':
             'name': 'constant.other.color.plantuml'
       }
@@ -326,18 +359,18 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '3':
             'name': 'constant.other.color.plantuml'
       }
       {
         'name': 'meta.sequence.deactivate.plantuml'
-        'match': '^\\s*(deactivate)\\s+(.*)\\s*$'
+        'match': '^\\s*(deactivate|destroy)\\s+(.*)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
       }
       {
         'name': 'meta.sequence.arrow.incoming.plantuml'
@@ -349,59 +382,70 @@
         ]
         'captures':
           '1':
-            'name': 'meta.class.incoming.plantuml'
+            'name': 'meta.class.arrow.plantuml'
           '2':
             'name': 'meta.class.arrow.plantuml'
           '3':
             'name': 'constant.other.color.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
             'name': 'keyword.control.plantuml'
           '6':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '7':
-            'name': 'constant.other.color.plantuml'
+            'name': 'punctuation.plantuml'
           '8':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
       }
       {
         'name': 'meta.sequence.arrow.outgoing.plantuml'
         'match': '^\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s*([ox]?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=[\\s\\]"]))?)(\\])\\s*(:)\\s*(.*)$'
         'captures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
             'name': 'meta.class.arrow.plantuml'
           '3':
             'name': 'constant.other.color.plantuml'
           '4':
-            'name': 'meta.class.outgoing.plantuml'
+            'name': 'meta.class.arrow.plantuml'
           '5':
-            'name': 'constant.other.color.plantuml'
+            'name': 'punctuation.plantuml'
           '6':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
       }
       {
         'name': 'meta.sequence.arrow.plantuml'
         'match': '^\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s*([ox]?(?:<<?|\\\\\\\\?|//?)?-(?:\\[(\\#\\w+)\\])?-?(?:>>?|\\\\\\\\?|//?)?(?:[ox](?=[\\s\\]"]))?)\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(as)\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))?\\s*(:)\\s*(.*)$'
         'captures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
             'name': 'meta.class.arrow.plantuml'
           '3':
             'name': 'constant.other.color.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
             'name': 'keyword.control.plantuml'
           '6':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '7':
-            'name': 'constant.other.color.plantuml'
+            'name': 'punctuation.plantuml'
           '8':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
+      }
+      {
+        'name': 'meta.sequence.verticalspace.plantuml'
+        'match': '^\\s*(?:(\\|{3})|(\\|\\|(\\d+)\\|\\|))\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+          '3':
+            'name': 'constant.numeric.plantuml'
       }
     ]
   'usecase_diagram':
@@ -413,21 +457,21 @@
         'match': '^\\s*([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s*("[^"]*")?\\s*((?:<\\|?|\\*|(?=<\\s)o)?(?:-+|\\.+)(?:\\|?>|\\*|o(?=\\s))?)\\s*("[^"]*")?\\s*([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s*(?:(:)\\s*(<|>)?\\s*([^<>]*)\\s*(<|>)?\\s*)?\\s*$'
         'captures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
-            'name': 'string.qoted.double.plantuml'
+            'name': 'string.plantuml'
           '3':
             'name': 'keyword.operator.plantuml'
           '4':
-            'name': 'string.qoted.double.plantuml'
+            'name': 'string.plantuml'
           '5':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '6':
-            'name': 'punctuation.definition.description.plantuml'
+            'name': 'punctuation.plantuml'
           '7':
             'name': 'keyword.operator.plantuml'
           '8':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
           '9':
             'name': 'keyword.operator.plantuml'
       }
@@ -438,13 +482,13 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '3':
             'name': 'keyword.control.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
-            'name': 'punctuation.definition.stereotype.begin.plantuml'
+            'name': 'punctuation.plantuml'
           '6':
             'name': 'constant.character.plantuml'
           '7':
@@ -452,7 +496,7 @@
           '8':
             'name': 'string.other.stereotype.plantuml'
           '9':
-            'name': 'punctuation.definition.stereotype.end.plantuml'
+            'name': 'punctuation.plantuml'
           '10':
             'name': 'constant.other.color.plantuml'
       }
@@ -463,13 +507,13 @@
           '1':
             'name': 'keyword.control.plantuml'
           '2':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '3':
             'name': 'keyword.control.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
-            'name': 'punctuation.definition.stereotype.begin.plantuml'
+            'name': 'punctuation.plantuml'
           '6':
             'name': 'constant.character.plantuml'
           '7':
@@ -477,11 +521,11 @@
           '8':
             'name': 'string.other.stereotype.plantuml'
           '9':
-            'name': 'punctuation.definition.stereotype.end.plantuml'
+            'name': 'punctuation.plantuml'
           '10':
             'name': 'constant.other.color.plantuml'
           '11':
-            'name': 'punctuation.definition.block.begin.plantuml'
+            'name': 'punctuation.plantuml'
         'end': '^\\s*(})\\s*$'
         'endCaptures':
           '1':
@@ -497,23 +541,23 @@
         'match': '^\\s*([\\w\\u0080-\\uFFFF]+|"[^"]+")\\s+(:)\\s+(-|\\#|~|\\+)?\\s*(\\{(?:static|classifier|abstract)\\})?\\s*(\\{(?:static|classifier|abstract)\\})?\\s*(?:([^\\(\\):\\s][^\\(\\):]*)\\s+)?([^\\(\\):\\s]+)\\s*[^\\(\\):]*(?:(:)\\s*(\\S.*(?!<\\s))?)?\\s*$'
         'captures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
-            'name': 'punctuation.definition.description.plantuml'
+            'name': 'punctuation.plantuml'
           '3':
-            'name': 'keyword.other.plantuml'
+            'name': 'constant.plantuml'
           '4':
             'name': 'keyword.control.plantuml'
           '5':
             'name': 'keyword.control.plantuml'
           '6':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '7':
             'name': 'variable.paramater.plantuml'
           '8':
             'name': 'keyword.operator.plantuml'
           '9':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
       }
       {
         'name': 'meta.class.method.plantuml'
@@ -521,9 +565,9 @@
         'end': '\\s*(\\))\\s*[^\\(\\):]*(?:(:)\\s*(\\S.*(?!<\\s))?)?\\s*$'
         'beginCaptures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
-            'name': 'punctuation.definition.description.plantuml'
+            'name': 'punctuation.plantuml'
           '3':
             'name': 'keyword.other.plantuml'
           '4':
@@ -531,18 +575,18 @@
           '5':
             'name': 'keyword.control.plantuml'
           '6':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '7':
             'name': 'entity.name.function.plantuml'
           '8':
-            'name': 'punctuation.definition.function.args.begin.plantuml'
+            'name': 'punctuation.plantuml'
         'endCaptures':
           '1':
-            'name': 'punctuation.definition.function.args.end.plantuml'
+            'name': 'punctuation.plantuml'
           '2':
             'name': 'keyword.operator.plantuml'
           '3':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
         'patterns': [
           {
             'include': '#class_function_arguments'
@@ -554,8 +598,119 @@
     'patterns': []
   'component_diagram':
     'patterns': []
+  'state_diagram_start':
+    'patterns': [
+      {
+        'name': 'meta.state.start.plantuml'
+        'begin': '^\\s*((?:\\[\\*\\]))\\s*((?:->|-(?:d|do|down|u|up|r|ri|right|l|le|left)?->))\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))\\s*(?:(:)\\s*(.*))?\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'constant.plantuml'
+          '2':
+            'name': 'meta.class.arrow.plantuml'
+          '3':
+            'name': 'variable.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+          '5':
+            'name': 'string.plantuml'
+        'end': '(?=@enduml)'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#state_diagram'
+          }
+        ]
+      }
+    ]
   'state_diagram':
-    'patterns': []
+    'patterns': [
+      {
+        'name': 'meta.state.arrow.plantuml'
+        'match': '^\\s*(?:((?:\\[\\*\\]))|((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))\\s*((?:->|-(?:d|do|down|u|up|r|ri|right|l|le|left)?->))\\s*(?:((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))|((?:\\[\\*\\])))(?:\\s*(:)\\s+(.*))?\\s*$'
+        'captures':
+          '1':
+            'name': 'constant.plantuml'
+          '2':
+            'name': 'variable.plantuml'
+          '3':
+            'name': 'meta.class.arrow.plantuml'
+          '4':
+            'name': 'variable.plantuml'
+          '5':
+            'name': 'constant.plantuml'
+          '6':
+            'name': 'punctuation.plantuml'
+          '7':
+            'name': 'string.plantuml'
+      }
+      {
+        'name': 'meta.state.declaring.block.plantuml'
+        'begin': '^\\s*(state)\\s+(?:("[^"]+")\\s+(as)\\s+)?((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(<<)\\s*(?:\\((.),(\\#?\\w+)\\))?\\s*([^<>\\(\\)]+)?\\s*(>>))?(?:\\s+(\\#\\w+))?\\s*({)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+          '4':
+            'name': 'variable.plantuml'
+          '5':
+            'name': 'punctuation.plantuml'
+          '6':
+            'name': 'constant.character.plantuml'
+          '7':
+            'name': 'constant.other.color.plantuml'
+          '8':
+            'name': 'string.other.stereotype.plantuml'
+          '9':
+            'name': 'punctuation.plantuml'
+          '10':
+            'name': 'constant.other.color.plantuml'
+          '11':
+            'name': 'punctuation.plantuml'
+        'end': '^\\s*(})\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#state_diagram'
+          }
+        ]
+      }
+      {
+        'name': 'meta.state.declaring.inline.plantuml'
+        'match': '^\\s*(state)\\s+(?:("[^"]+")\\s+(as)\\s+)?((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(?:\\s+(<<)\\s*(?:\\((.),(\\#?\\w+)\\))?\\s*([^<>\\(\\)]+)?\\s*(>>))?(?:\\s+(\\#\\w+))?\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'variable.plantuml'
+          '3':
+            'name': 'keyword.control.plantuml'
+          '4':
+            'name': 'variable.plantuml'
+          '5':
+            'name': 'punctuation.plantuml'
+          '6':
+            'name': 'constant.character.plantuml'
+          '7':
+            'name': 'constant.other.color.plantuml'
+          '8':
+            'name': 'string.other.stereotype.plantuml'
+          '9':
+            'name': 'punctuation.plantuml'
+          '10':
+            'name': 'constant.other.color.plantuml'
+      }
+    ]
   'object_diagram':
     'patterns': []
   'class_block':
@@ -567,7 +722,7 @@
           '1':
             'name': 'keyword.operator.plantuml'
           '2':
-            'name': 'string.unquoted.plantuml'
+            'name': 'string.plantuml'
           '3':
             'name': 'keyword.operator.plantuml'
       }
@@ -582,13 +737,13 @@
           '3':
             'name': 'keyword.control.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
             'name': 'variable.paramater.plantuml'
           '6':
             'name': 'keyword.operator.plantuml'
           '7':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
       }
       {
         'name': 'meta.class.method.plantuml'
@@ -601,19 +756,19 @@
           '3':
             'name': 'keyword.control.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '5':
             'name': 'entity.name.function.plantuml'
           '6':
-            'name': 'punctuation.definition.function.args.begin.plantuml'
+            'name': 'punctuation.plantuml'
         'end': '\\s*(\\))\\s*[^\\(\\):]*(?:(:)\\s*(\\S.*(?!<\\s))?)?\\s*$'
         'endCaptures':
           '1':
-            'name': 'punctuation.definition.function.args.end.plantuml'
+            'name': 'punctuation.plantuml'
           '2':
             'name': 'keyword.operator.plantuml'
           '3':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
         'patterns': [
           {
             'include': '#class_function_arguments'
@@ -628,12 +783,12 @@
         'match': '\\s*(?:([^\\(\\):,\\s][^\\(\\):,]*)\\s+)?([^\\(\\):,\\s]+)\\s*(?:(:)\\s*([^\\(\\):,\\s][^\\(\\):,]*(?!<\\s)))?\\s*,?\\s*'
         'captures':
           '1':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
           '2':
             'name': 'variable.paramater.plantuml'
           '3':
             'name': 'keyword.operator.plantuml'
           '4':
-            'name': 'entity.name.type.plantuml'
+            'name': 'variable.plantuml'
       }
     ]

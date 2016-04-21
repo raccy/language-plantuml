@@ -6,10 +6,19 @@ grammar =
   fileTypes: [ "puml", "plantuml", "txt" ]
 
   macros:
+    keyword_name: 'keyword.control'
+    other_name: 'constant'
+    file_name: 'string.other.link'
+    punct_name: 'punctuation'
     color: /\#\w+/
+    color_name: 'constant.other.color'
     entityName: /[\w\u0080-\uFFFF]+/
     entityQuoted: /"[^"]+"/
     entity: /(?:{entityName}|{entityQuoted})/
+    entity_name: 'variable'
+    integer: /(?:[1-9][0-9]*)/
+    number: /(?:{integer}|\d+(?:\.\d+)?)/
+    number_name: 'constant.numeric'
     arrowColor: ///
                 [ox]?
                 (?:<<?|\\\\?|//?)?
@@ -17,36 +26,70 @@ grammar =
                 (?:>>?|\\\\?|//?)?
                 (?:[ox](?=[\s\]"]))?
                 ///
+    arrowState: ///(?:
+                  -> # equivalent to -right->
+                  |
+                  -(?:d|do|down|u|up|r|ri|right|l|le|left)?->
+                )///
+    arrow_name: 'meta.class.arrow'
     stringQuoted: /{entityQuoted}/
+    string_name: 'string'
     participant: /(?:actor|boundary|control|entity|database|participant)/
+    stateSource: /(?:\[\*\])/
+    stateSink: /{stateSource}/
 
-  firstLineMatch: '^@startuml'
+  firstLineMatch: /^\s*@startuml/
   patterns: [
     {
       name: 'meta.source.block'
-      begin: '^@startuml'
+      begin: /^\s*(@startuml)(?:\s+(.*))\s*$/
       beginCaptures:
-        '0': { name: 'punctuation.section.source.begin' }
+        '1': { name: '{other_name}' }
+        '2': { name: '{file_name}' }
       contentName: 'source'
-      end: '^@enduml'
+      end: /^\s*@enduml/
       endCaptures:
-        '0': { name: 'punctuation.section.sourec.end' }
+        '0': { name: '{other_name}' }
       patterns: [
         include: '#plantuml'
       ]
     }
   ]
-  'repository':
-    'plantuml':
+  repository:
+    'common':
       patterns: [
         {
           include: '#comments'
         }
         {
+          name: 'meta.scale'
+          match: ///^\s*
+            (scale)\s+
+            (max\s+)?
+            (?:
+              ({number})
+              (?:(\/)({number}))? # scale 2/3
+              (?:\s+(width|height))?
+              |
+              ({number})(\*)({number}) # scale 200*300
+            )
+            \s*$///
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{number_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{number_name}' }
+            '6': { name: '{keyword_name}' }
+            '7': { name: '{number_name}' }
+            '8': { name: '{punct_name}' }
+            '9': { name: '{number_name}' }
+        }
+        {
           name: 'meta.skinparam'
           match: /^\s*(skinparam)\s+(\S+)\s+(.*)$/
           captures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
             '2': { name: 'entity.name.tag' }
             '3': { name: 'constant.other' }
         }
@@ -54,25 +97,26 @@ grammar =
           name: 'meta.title'
           match: /^\s*(title)\s+(\S.*)$/
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'string.unquoted' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
         }
         {
           name: 'meta.legend.block'
           begin: /^\s*(legend)(?:\s+(left|right|center))?\s*$/
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'variable.language' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{number_name}' }
           end: /^\s*(endlegend)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
-          contentName: 'string.unquoted'
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
         }
         {
           name: 'meta.newpage'
-          match: /^\s*(newpage)\s*$/
+          match: /^\s*(newpage)(?:\s+(.*)?)\s*$/
           captures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
         }
         {
           name: 'meta.note.block'
@@ -90,15 +134,15 @@ grammar =
               $
               ///
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'variable.language' }
-            '3': { name: 'entity.type.name' }
-            '5': { name: 'entity.type.name' }
-            '6': { name: 'constant.other.color' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{number_name}' }
+            '3': { name: '{entity_name}' }
+            '5': { name: '{entity_name}' }
+            '6': { name: '{color_name}' }
           end: /^\s*(end\s+[hr]?note|end[hr]note)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
-          contentName: 'string.unquoted'
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
         }
         {
           name: 'meta.note.line'
@@ -116,13 +160,20 @@ grammar =
               $
               ///
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'variable.language' }
-            '3': { name: 'entity.type.name' }
-            '5': { name: 'entity.type.name' }
-            '6': { name: 'constant.other.color' }
-            '7': { name: 'keyword.operator' }
-            '8': { name: 'string.unquoted' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{number_name}' }
+            '3': { name: '{entity_name}' }
+            '5': { name: '{entity_name}' }
+            '6': { name: '{color_name}' }
+            '7': { name: '{punct_name}' }
+            '8': { name: '{string_name}' }
+        }
+      ]
+
+    'plantuml':
+      patterns: [
+        {
+          include: '#common'
         }
         {
           include: '#sequence_diagram'
@@ -140,7 +191,7 @@ grammar =
           include: '#component_diagram'
         }
         {
-          include: '#state_diagram'
+          include: '#state_diagram_start'
         }
         {
           include: "#object_diagram"
@@ -151,7 +202,7 @@ grammar =
         #   match: '^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
         #   captures:
         #     '1':
-        #       name: 'keyword.control.import'
+        #       name: '{keyword_name}.import'
         #   name: 'meta.preprocessor'
         # }
         # {
@@ -205,7 +256,7 @@ grammar =
               $///
           captures:
             '1': { name: 'keyword.operator' }
-            '2': { name: 'string.unquoted' }
+            '2': { name: '{string_name}' }
             '3': { name: 'keyword.operator' }
         }
         {
@@ -217,7 +268,7 @@ grammar =
               \s+(?:({stringQuoted}))?
               \s*$///
           captures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
             '2': { name: 'constant.numeric' }
             '3': { name: 'string.quoted.double' }
             '4': { name: 'constant.numeric' }
@@ -231,11 +282,11 @@ grammar =
               (?:\s+(.*))?\s*
               $///
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'string.unquoted' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
           end: /^\s*(end)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
           patterns: [
             {
               match: ///^\s*
@@ -243,8 +294,8 @@ grammar =
                   (?:\s+(.*))?\s*
                   $///
               captures:
-                '1': { name: 'keyword.control' }
-                '2': { name: 'string.unquoted' }
+                '1': { name: '{keyword_name}' }
+                '2': { name: '{string_name}' }
             }
             {
               include: '#plantuml'
@@ -255,11 +306,11 @@ grammar =
           name: 'meta.sequence.box'
           begin: /^\s*(box)\s+(.*)\s*$/
           beginCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
             '2': { name: 'string.quoted' }
           end: /^\s*(end\s+box)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
           patterns: [
             {
               include: '#plantuml'
@@ -270,12 +321,12 @@ grammar =
           name: 'meta.sequence.loop'
           begin: /^\s*(loop)(?:\s+(.*)\s+(times))?\s*$/
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'variable.language' }
-            '3': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{number_name}' }
+            '3': { name: '{keyword_name}' }
           end: /^\s*(end(?:\s+loop)?)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
           patterns: [
             {
               include: '#plantuml'
@@ -289,11 +340,11 @@ grammar =
                 (?:\s+(.*))?
                 \s*$///
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'string.unquoted' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
           end: /^\s*(end(?:\s+\1)?)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
           patterns: [
             {
               include: '#plantuml'
@@ -304,11 +355,11 @@ grammar =
           name: 'meta.sequence.group'
           begin: /^\s*(group)\s+(.*)\s*$/
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'string.unquoted' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
           end: /^\s*(end(?:\s+\1)?)\s*$/
           endCaptures:
-            '1': { name: 'keyword.control' }
+            '1': { name: '{keyword_name}' }
           patterns: [
             {
               include: '#plantuml'
@@ -332,31 +383,31 @@ grammar =
               (?:\s+({color}))?
               \s*$///
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'entity.name.type' }
-            '3': { name: 'keyword.control' }
-            '4': { name: 'entity.name.type' }
-            '5': { name: 'punctuation.definition.stereotype.begin' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{punct_name}' }
             '6': { name: 'constant.character' }
-            '7': { name: 'constant.other.color' }
+            '7': { name: '{color_name}' }
             '8': { name: 'string.other.stereotype' }
-            '9': { name: 'punctuation.definition.stereotype.end' }
-            '10': { name: 'constant.other.color' }
+            '9': { name: '{punct_name}' }
+            '10': { name: '{color_name}' }
         }
         {
           name: 'meta.sequence.activate'
           match: /^\s*(activate)\s+({entity})(?:\s+({color}))?\s*$/
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'entity.name.type' }
-            '3': { name: 'constant.other.color' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{color_name}' }
         }
         {
           name: 'meta.sequence.deactivate'
           match: /^\s*(deactivate|destroy)\s+(.*)\s*$/
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'entity.name.type' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
         }
         {
           name: 'meta.sequence.arrow.incoming'
@@ -373,14 +424,14 @@ grammar =
             { include: 'sequence_arrow' }
           ]
           captures:
-            '1': { name: 'meta.class.incoming' }
-            '2': { name: 'meta.class.arrow' }
-            '3': { name: 'constant.other.color' }
-            '4': { name: 'entity.name.type' }
-            '5': { name: 'keyword.control' }
-            '6': { name: 'entity.name.type' }
-            '7': { name: 'constant.other.color' }
-            '8': { name: 'string.unquoted' }
+            '1': { name: '{arrow_name}' }
+            '2': { name: '{arrow_name}' }
+            '3': { name: '{color_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{entity_name}' }
+            '7': { name: '{punct_name}' }
+            '8': { name: '{string_name}' }
         }
         {
           name: 'meta.sequence.arrow.outgoing'
@@ -393,12 +444,12 @@ grammar =
                 (.*)$
                 ///
           captures:
-            '1': { name: 'entity.name.type' }
-            '2': { name: 'meta.class.arrow' }
-            '3': { name: 'constant.other.color' }
-            '4': { name: 'meta.class.outgoing' }
-            '5': { name: 'constant.other.color' }
-            '6': { name: 'string.unquoted' }
+            '1': { name: '{entity_name}' }
+            '2': { name: '{arrow_name}' }
+            '3': { name: '{color_name}' }
+            '4': { name: '{arrow_name}' }
+            '5': { name: '{punct_name}' }
+            '6': { name: '{string_name}' }
         }
         {
           name: 'meta.sequence.arrow'
@@ -412,14 +463,14 @@ grammar =
                 (.*)$
                 ///
           captures:
-            '1': { name: 'entity.name.type' }
-            '2': { name: 'meta.class.arrow' }
-            '3': { name: 'constant.other.color' }
-            '4': { name: 'entity.name.type' }
-            '5': { name: 'keyword.control' }
-            '6': { name: 'entity.name.type' }
-            '7': { name: 'constant.other.color' }
-            '8': { name: 'string.unquoted' }
+            '1': { name: '{entity_name}' }
+            '2': { name: '{arrow_name}' }
+            '3': { name: '{color_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{entity_name}' }
+            '7': { name: '{punct_name}' }
+            '8': { name: '{string_name}' }
         }
         {
           name: 'meta.sequence.verticalspace'
@@ -431,9 +482,9 @@ grammar =
                 )\s*$
                 ///
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'keyword.control' }
-            '3': { name: 'variable.language' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{number_name}' }
         }
       ]
     # TODO: implement usecase_diagram
@@ -443,7 +494,7 @@ grammar =
     'class_diagram':
       patterns: [
         {
-          name: 'meta.class.arrow'
+          name: '{arrow_name}'
           match: ///^\s*
               ([\w\u0080-\uFFFF]+|"[^"]+")\s*
               ("[^"]*")?\s*
@@ -457,14 +508,14 @@ grammar =
               (?:(:)\s*(<|>)?\s*([^<>]*)\s*(<|>)?\s*)?\s*
               $///
           captures:
-            '1': { name: 'entity.name.type' }
-            '2': { name: 'string.qoted.double' }
+            '1': { name: '{entity_name}' }
+            '2': { name: '{string_name}' }
             '3': { name: 'keyword.operator' }
-            '4': { name: 'string.qoted.double' }
-            '5': { name: 'entity.name.type' }
-            '6': { name: 'punctuation.definition.description' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{entity_name}' }
+            '6': { name: '{punct_name}' }
             '7': { name: 'keyword.operator' }
-            '8': { name: 'string.unquoted' }
+            '8': { name: '{string_name}' }
             '9': { name: 'keyword.operator' }
         }
         {
@@ -480,16 +531,16 @@ grammar =
               (?:\s+({color}))?
               \s*$///
           captures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'entity.name.type' }
-            '3': { name: 'keyword.control' }
-            '4': { name: 'entity.name.type' }
-            '5': { name: 'punctuation.definition.stereotype.begin' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{punct_name}' }
             '6': { name: 'constant.character' }
-            '7': { name: 'constant.other.color' }
+            '7': { name: '{color_name}' }
             '8': { name: 'string.other.stereotype' }
-            '9': { name: 'punctuation.definition.stereotype.end' }
-            '10': { name: 'constant.other.color' }
+            '9': { name: '{punct_name}' }
+            '10': { name: '{color_name}' }
         }
         {
           name: 'meta.class.declaring.block'
@@ -504,17 +555,17 @@ grammar =
               (?:\s+({color}))?
               \s*({)\s*$///
           beginCaptures:
-            '1': { name: 'keyword.control' }
-            '2': { name: 'entity.name.type' }
-            '3': { name: 'keyword.control' }
-            '4': { name: 'entity.name.type' }
-            '5': { name: 'punctuation.definition.stereotype.begin' }
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{punct_name}' }
             '6': { name: 'constant.character' }
-            '7': { name: 'constant.other.color' }
+            '7': { name: '{color_name}' }
             '8': { name: 'string.other.stereotype' }
-            '9': { name: 'punctuation.definition.stereotype.end' }
-            '10': { name: 'constant.other.color' }
-            '11': { name: 'punctuation.definition.block.begin' }
+            '9': { name: '{punct_name}' }
+            '10': { name: '{color_name}' }
+            '11': { name: '{punct_name}' }
           end: /^\s*(})\s*$/
           endCaptures:
             '1': { name: 'punctuation.definition.block.end' }
@@ -543,15 +594,15 @@ grammar =
               )?\s*
               $///
           captures:
-            '1': { name: 'entity.name.type' }
-            '2': { name: 'punctuation.definition.description' }
-            '3': { name: 'keyword.other' }
-            '4': { name: 'keyword.control' }
-            '5': { name: 'keyword.control' }
-            '6': { name: 'entity.name.type' }
+            '1': { name: '{entity_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{other_name}' }
+            '4': { name: '{keyword_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{entity_name}' }
             '7': { name: 'variable.paramater' }
             '8': { name: 'keyword.operator' }
-            '9': { name: 'entity.name.type' }
+            '9': { name: '{entity_name}' }
         }
         {
           name: 'meta.class.method'
@@ -575,18 +626,18 @@ grammar =
               )?\s*
               $///
           beginCaptures:
-            '1': { name: 'entity.name.type' }
-            '2': { name: 'punctuation.definition.description' }
+            '1': { name: '{entity_name}' }
+            '2': { name: '{punct_name}' }
             '3': { name: 'keyword.other' }
-            '4': { name: 'keyword.control' }
-            '5': { name: 'keyword.control' }
-            '6': { name: 'entity.name.type' }
+            '4': { name: '{keyword_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{entity_name}' }
             '7': { name: 'entity.name.function' }
-            '8': { name: 'punctuation.definition.function.args.begin' }
+            '8': { name: '{punct_name}' }
           endCaptures:
-            '1': { name: 'punctuation.definition.function.args.end' }
+            '1': { name: '{punct_name}' }
             '2': { name: 'keyword.operator' }
-            '3': { name: 'entity.name.type' }
+            '3': { name: '{entity_name}' }
           patterns: [
             {
               include: '#class_function_arguments'
@@ -603,8 +654,112 @@ grammar =
       patterns: [
       ]
     # TODO: implement state_diagram
+    'state_diagram_start':
+      patterns: [
+        {
+          name: 'meta.state.start'
+          begin: ///^\s*
+              ({stateSource})\s*
+              ({arrowState})\s*
+              ({entity})\s*
+              (?:(:)\s*(.*))?
+              \s*$///
+          beginCaptures:
+            '1': { name: '{other_name}' }
+            '2': { name: '{arrow_name}' }
+            '3': { name: '{entity_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{string_name}' }
+          end: /(?=@enduml)/
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#state_diagram'
+            }
+          ]
+        }
+      ]
     'state_diagram':
       patterns: [
+        {
+          name: 'meta.state.arrow'
+          match: ///^\s*
+              (?:({stateSource})|({entity}))\s*
+              ({arrowState})\s*
+              (?:({entity})|({stateSink}))
+              (?:\s*(:)\s+(.*))?
+              \s*$///
+          captures:
+            '1': { name: '{other_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{arrow_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{other_name}' }
+            '6': { name: '{punct_name}' }
+            '7': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.state.declaring.block'
+          begin: ///^\s*
+              (state)\s+
+              (?:({entityQuoted})\s+(as)\s+)?
+              ({entity})
+              (?:\s+(<<)\s*
+                  (?:\((.),(\#?\w+)\))?\s*
+                  ([^<>\(\)]+)?\s*
+              (>>))?
+              (?:\s+({color}))?
+              \s*({)\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{punct_name}' }
+            '6': { name: 'constant.character' }
+            '7': { name: '{color_name}' }
+            '8': { name: 'string.other.stereotype' }
+            '9': { name: '{punct_name}' }
+            '10': { name: '{color_name}' }
+            '11': { name: '{punct_name}' }
+          end: /^\s*(})\s*$/
+          endCaptures:
+            '1': { name: '{punct_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#state_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.state.declaring.inline'
+          match: ///^\s*
+              (state)\s+
+              (?:({entityQuoted})\s+(as)\s+)?
+              ({entity})
+              (?:\s+(<<)\s*
+                  (?:\((.),(\#?\w+)\))?\s*
+                  ([^<>\(\)]+)?\s*
+              (>>))?
+              (?:\s+({color}))?
+              \s*$///
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
+            '5': { name: '{punct_name}' }
+            '6': { name: 'constant.character' }
+            '7': { name: '{color_name}' }
+            '8': { name: 'string.other.stereotype' }
+            '9': { name: '{punct_name}' }
+            '10': { name: '{color_name}' }
+        }
       ]
     # TODO: implement object_diagram
     'object_diagram':
@@ -627,7 +782,7 @@ grammar =
               $///
           captures:
             '1': { name: 'keyword.operator' }
-            '2': { name: 'string.unquoted' }
+            '2': { name: '{string_name}' }
             '3': { name: 'keyword.operator' }
         }
         {
@@ -648,12 +803,12 @@ grammar =
               $///
           captures: {
             '1': { name: 'keyword.other' }
-            '2': { name: 'keyword.control' }
-            '3': { name: 'keyword.control' }
-            '4': { name: 'entity.name.type' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
             '5': { name: 'variable.paramater' }
             '6': { name: 'keyword.operator' }
-            '7': { name: 'entity.name.type' }
+            '7': { name: '{entity_name}' }
           }
         }
         {
@@ -671,11 +826,11 @@ grammar =
               ///
           beginCaptures: {
             '1': { name: 'keyword.other' }
-            '2': { name: 'keyword.control' }
-            '3': { name: 'keyword.control' }
-            '4': { name: 'entity.name.type' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{keyword_name}' }
+            '4': { name: '{entity_name}' }
             '5': { name: 'entity.name.function' }
-            '6': { name: 'punctuation.definition.function.args.begin' }
+            '6': { name: '{punct_name}' }
           }
           end: ///
               \s*
@@ -688,9 +843,9 @@ grammar =
               $
               ///
           endCaptures: {
-            '1': { name: 'punctuation.definition.function.args.end' }
+            '1': { name: '{punct_name}' }
             '2': { name: 'keyword.operator' }
-            '3': { name: 'entity.name.type' }
+            '3': { name: '{entity_name}' }
           }
           patterns: [
             {
@@ -714,10 +869,10 @@ grammar =
               )?\s*,?\s*
               ///
           captures: {
-            '1': { name: 'entity.name.type' }
+            '1': { name: '{entity_name}' }
             '2': { name: 'variable.paramater' }
             '3': { name: 'keyword.operator' }
-            '4': { name: 'entity.name.type' }
+            '4': { name: '{entity_name}' }
           }
         }
       ]
