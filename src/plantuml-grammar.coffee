@@ -323,8 +323,8 @@ grammar =
                 |
                 {participant}
               )\s+
-              (?:({entity})\s+(as))?
-              \s+({entity})
+              (?:({entity})\s+(as)\s+)?
+              ({entity})
               (?:\s+(<<)\s*
                 (?:\((.),({color})\))?
                 (.*)
