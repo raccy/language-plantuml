@@ -1,7 +1,21 @@
 '.source.plantuml':
-  'startuml':
-    'prefix': 'st'
-    'body': 'startuml'
-  'enduml':
-    'prefix': 'en'
-    'body': 'enduml'
+  "diagram":
+    prefix: 'diag'
+    body: """
+    @startuml $1
+      $2
+    @enduml
+    """
+  "sequence-box":
+    prefix: 'box'
+    body: """
+    box "$1"
+      $2
+    end box
+    """
+  "sequence-participant":
+    prefix: 'participant'
+    body: '${1:participant} "$2" ${3:as ${4:$2}} ${5:<< (C,#ADD1B2) >>}'
+  "sequence-arrow":
+    prefix: 'arrow'
+    body: '$1 ${2:->} $3: $4'
