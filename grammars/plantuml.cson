@@ -113,7 +113,7 @@
       }
       {
         'name': 'meta.note.block.plantuml'
-        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))(\\s*,\\s*((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")))*)?(?:\\s+(\\#\\w+))?)?\\s*$'
+        'begin': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s*,\\s*(?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))*))?(?:\\s+(\\#\\w+))?)?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -121,9 +121,7 @@
             'name': 'constant.numeric.plantuml'
           '3':
             'name': 'meta.class.plantuml'
-          '5':
-            'name': 'meta.class.plantuml'
-          '6':
+          '4':
             'name': 'constant.other.color.plantuml'
         'end': '^\\s*(end\\s*\\1)\\s*$'
         'endCaptures':
@@ -133,7 +131,7 @@
       }
       {
         'name': 'meta.note.line.plantuml'
-        'match': '^([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s*,\\s*(?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))*))?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
+        'match': '^\\s*([hr]?note)\\s*(?:\\s+((?:left|right)(?:\\s+of)?|over)(?:\\s+((?:[\\w\\u0080-\\uFFFF]+|"[^"]+")(?:\\s*,\\s*(?:[\\w\\u0080-\\uFFFF]+|"[^"]+"))*))?(?:\\s+(\\#\\w+))?)?\\s*(:)\\s*(\\S.*)\\s*$'
         'captures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -141,13 +139,11 @@
             'name': 'constant.plantuml'
           '3':
             'name': 'meta.class.plantuml'
-          '5':
-            'name': 'meta.class.plantuml'
-          '6':
+          '4':
             'name': 'constant.other.color.plantuml'
-          '7':
+          '5':
             'name': 'punctuation.plantuml'
-          '8':
+          '6':
             'name': 'string.plantuml'
       }
       {

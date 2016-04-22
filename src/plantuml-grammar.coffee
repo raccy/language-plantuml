@@ -136,8 +136,7 @@ grammar =
               (?:
                 \s+((?:left|right)(?:\s+of)?|over)
                 (?:\s+
-                  ({entity})
-                  (\s*,\s*({entity}))*
+                  ({entity}(?:\s*,\s*{entity})*)
                 )?
                 (?:\s+({color}))?
               )?\s*
@@ -147,8 +146,7 @@ grammar =
             '1': { name: '{keyword_name}' }
             '2': { name: '{number_name}' }
             '3': { name: '{entity_name}' }
-            '5': { name: '{entity_name}' }
-            '6': { name: '{color_name}' }
+            '4': { name: '{color_name}' }
           end: /^\s*(end\s*\1)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
@@ -156,7 +154,7 @@ grammar =
         }
         {
           name: 'meta.note.line'
-          match: ///^
+          match: ///^\s*
               ([hr]?note)\s*
               (?:
                 \s+((?:left|right)(?:\s+of)?|over)
@@ -165,17 +163,15 @@ grammar =
                 )?
                 (?:\s+({color}))?
               )?\s*
-              (:)\s*(\S.*)\s*
-              $
+              (:)\s*(\S.*)\s*$
               ///
           captures:
             '1': { name: '{keyword_name}' }
             '2': { name: '{other_name}' }
             '3': { name: '{entity_name}' }
-            '5': { name: '{entity_name}' }
-            '6': { name: '{color_name}' }
-            '7': { name: '{punct_name}' }
-            '8': { name: '{string_name}' }
+            '4': { name: '{color_name}' }
+            '5': { name: '{punct_name}' }
+            '6': { name: '{string_name}' }
         }
         {
           name: 'meta.note.floating'
