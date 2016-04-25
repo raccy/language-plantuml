@@ -119,6 +119,25 @@ grammar =
           contentName: '{string_name}'
         }
         {
+          name: 'meta.header.line'
+          match: /^\s*(?:(center|left|right)\s+)?(header|footer)\s+(\S.*)$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.header.block'
+          begin: /^\s*(?:(center|left|right)\s+)?(header|footer)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+          end: /^\s*(end\s*\2)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
+        }
+        {
           name: 'meta.legend.block'
           begin: /^\s*(legend)(?:\s+(left|right|center))?\s*$/
           beginCaptures:
@@ -551,6 +570,12 @@ grammar =
             '1': { name: '{punct_name}' }
             '2': { name: '{punct_name}' }
             '3': { name: '{number_name}' }
+        }
+        {
+          name: 'meta.sequence.footbox'
+          match: /^\s*(hide\s+footbox)\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
         }
       ]
     # TODO: implement usecase_diagram

@@ -118,8 +118,8 @@ legend
 this is the legend
 endlegend
 
-footer dummy footer
-header
+center footer dummy footer
+left header
   this is
   a long __dummy__ header
 end header

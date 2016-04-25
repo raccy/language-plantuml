@@ -33,7 +33,7 @@ Contents of PlantUML Language Reference Guid
     - [ ] Stereotypes and Spots
     - [ ] More information on titles
     - [x] Participants encompass
-    - [ ] Removing Footer
+    - [x] Removing Footer
     - [ ] Skinparam
 - [ ] Use Case Diagram
     - [ ] Usecases

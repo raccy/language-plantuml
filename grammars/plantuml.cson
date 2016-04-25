@@ -100,6 +100,31 @@
         'contentName': 'string.plantuml'
       }
       {
+        'name': 'meta.header.line.plantuml'
+        'match': '^\\s*(?:(center|left|right)\\s+)?(header|footer)\\s+(\\S.*)$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+          '3':
+            'name': 'string.plantuml'
+      }
+      {
+        'name': 'meta.header.block.plantuml'
+        'begin': '^\\s*(?:(center|left|right)\\s+)?(header|footer)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(end\\s*\\2)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'contentName': 'string.plantuml'
+      }
+      {
         'name': 'meta.legend.block.plantuml'
         'begin': '^\\s*(legend)(?:\\s+(left|right|center))?\\s*$'
         'beginCaptures':
@@ -518,6 +543,13 @@
             'name': 'punctuation.plantuml'
           '3':
             'name': 'constant.numeric.plantuml'
+      }
+      {
+        'name': 'meta.sequence.footbox.plantuml'
+        'match': '^\\s*(hide\\s+footbox)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
       }
     ]
   'usecase_diagram':
