@@ -62,6 +62,14 @@ grammar =
           include: '#comments'
         }
         {
+          name: 'meta.pragma'
+          match: /^\s*(!pragma)\s+(\S+)\s+(.*)$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{other_name}' }
+            '3': { name: '{string_name}' }
+        }
+        {
           name: 'meta.scale'
           match: ///^\s*
             (scale)\s+
@@ -336,7 +344,7 @@ grammar =
         {
           name: 'meta.sequence.alt'
           begin: ///^\s*
-              (alt)
+              (alt|par)
               (?:\s+(.*))?\s*
               $///
           beginCaptures:
@@ -394,7 +402,7 @@ grammar =
         {
           name: 'meta.sequence.groupalt'
           begin: ///^\s*
-                (opt|loop|par|break|critical)
+                (opt|loop|break|critical)
                 (?:\s+(.*))?
                 \s*$///
           beginCaptures:

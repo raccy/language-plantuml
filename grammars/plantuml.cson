@@ -34,6 +34,17 @@
         'include': '#comments'
       }
       {
+        'name': 'meta.pragma.plantuml'
+        'match': '^\\s*(!pragma)\\s+(\\S+)\\s+(.*)$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'constant.plantuml'
+          '3':
+            'name': 'string.plantuml'
+      }
+      {
         'name': 'meta.scale.plantuml'
         'match': '^\\s*(scale)\\s+(max\\s+)?(?:((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?))(?:(/)((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?)))?(?:\\s+(width|height))?|((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?))(\\*)((?:(?:[1-9][0-9]*)|\\d+(?:\\.\\d+)?)))\\s*$'
         'captures':
@@ -290,7 +301,7 @@
       }
       {
         'name': 'meta.sequence.alt.plantuml'
-        'begin': '^\\s*(alt)(?:\\s+(.*))?\\s*$'
+        'begin': '^\\s*(alt|par)(?:\\s+(.*))?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
@@ -354,7 +365,7 @@
       }
       {
         'name': 'meta.sequence.groupalt.plantuml'
-        'begin': '^\\s*(opt|loop|par|break|critical)(?:\\s+(.*))?\\s*$'
+        'begin': '^\\s*(opt|loop|break|critical)(?:\\s+(.*))?\\s*$'
         'beginCaptures':
           '1':
             'name': 'keyword.control.plantuml'
