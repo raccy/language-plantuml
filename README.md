@@ -164,11 +164,11 @@ Contents of PlantUML Language Reference Guid
     - [ ] Fontcolor, nameandsize
     - [ ] Blackand White
 - [ ] Preprocessing
-    - [ ] Including files
-    - [ ] Constant definition
-    - [ ] Macro definition
-    - [ ] Macro onseverallines
-    - [ ] Conditions
+    - [x] Including files
+    - [x] Constant definition
+    - [x] Macro definition
+    - [x] Macro onseverallines
+    - [x] Conditions
     - [ ] Search path
     - [ ] Advanced features
 - [ ] Internationalization

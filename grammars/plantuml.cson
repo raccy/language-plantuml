@@ -34,6 +34,9 @@
         'include': '#comments'
       }
       {
+        'include': '#preprocessor'
+      }
+      {
         'name': 'meta.pragma.plantuml'
         'match': '^\\s*(!pragma)\\s+(\\S+)\\s+(.*)$'
         'captures':
@@ -1182,5 +1185,102 @@
             'name': 'keyword.operator.plantuml'
           '4':
             'name': 'meta.class.plantuml'
+      }
+    ]
+  'preprocessor':
+    'patterns': [
+      {
+        'name': 'meta.preprocessor.include.plantuml'
+        'match': '^\\s*(!include)\\s+(.*)$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'meta.class.plantuml'
+      }
+      {
+        'name': 'meta.preprocessor.define.plantuml'
+        'begin': '^\\s*(!define)\\s+([\\w\\u0080-\\uFFFF]+)(?:(\\()([^)]*)(\\)))?\\s*'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.function.plantuml'
+          '3':
+            'name': 'punctuation.plantuml'
+          '4':
+            'name': 'string.plantuml'
+          '5':
+            'name': 'punctuation.plantuml'
+        'end': '\\s*$'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.preprocessor.undef.plantuml'
+        'match': '^\\s*(!undef)\\s+([\\w\\u0080-\\uFFFF]+)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.function.plantuml'
+      }
+      {
+        'name': 'meta.preprocessor.definelong.plantuml'
+        'begin': '^\\s*(!definelong)\\s+([\\w\\u0080-\\uFFFF]+)(\\()([^)]*)(\\))\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.function.plantuml'
+          '3':
+            'name': 'punctuation.plantuml'
+          '4':
+            'name': 'string.plantuml'
+          '5':
+            'name': 'punctuation.plantuml'
+        'end': '^\\s*(!end\\s*definelong)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.preprocessor.ifdef.plantuml'
+        'begin': '^\\s*(!ifn?def)\\s+([\\w\\u0080-\\uFFFF]+)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'entity.name.function.plantuml'
+        'end': '^\\s*(!endif)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'patterns': [
+          {
+            'include': '#plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.preprocessor.macrocall.plantuml'
+        'match': '^\\s*([\\w\\u0080-\\uFFFF]+)(\\()([^)]*)(\\))\\s*$'
+        'captures':
+          '1':
+            'name': 'entity.name.function.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+          '3':
+            'name': 'string.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
       }
     ]

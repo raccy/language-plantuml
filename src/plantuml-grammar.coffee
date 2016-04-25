@@ -7,6 +7,7 @@ grammar =
 
   macros:
     keyword_name: 'keyword.control'
+    function_name: 'entity.name.function'
     other_name: 'constant'
     file_name: 'string.other.link'
     punct_name: 'punctuation'
@@ -31,7 +32,8 @@ grammar =
                   |
                   -(?:d|do|down|u|up|r|ri|right|l|le|left)?->
                 )///
-    arrow_name: 'entity.name.function'
+
+    arrow_name: '{function_name}'
     stringQuoted: /{entityQuoted}/
     string_name: 'string'
     participant: /(?:actor|boundary|control|entity|database|participant)/
@@ -60,6 +62,9 @@ grammar =
       patterns: [
         {
           include: '#comments'
+        }
+        {
+          include: "#preprocessor"
         }
         {
           name: 'meta.pragma'
@@ -242,14 +247,6 @@ grammar =
           include: "#object_diagram"
         }
 
-        # {
-        #   # TODO: c-like macro
-        #   match: '^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
-        #   captures:
-        #     '1':
-        #       name: '{keyword_name}.import'
-        #   name: 'meta.preprocessor'
-        # }
         # {
         #   # TODO: escaped character
         #   match: '(")([^"]*)(")'
@@ -1212,6 +1209,83 @@ grammar =
             '3': { name: 'keyword.operator' }
             '4': { name: '{entity_name}' }
           }
+        }
+      ]
+
+    'preprocessor':
+      patterns: [
+        {
+          name: 'meta.preprocessor.include'
+          match: /^\s*(!include)\s+(.*)$/
+          captures: {
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+          }
+        }
+        {
+          name: 'meta.preprocessor.define'
+          begin: /^\s*(!define)\s+({entityName})(?:(\()([^)]*)(\)))?\s*/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+          end: /\s*$/
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.undef'
+          match: /^\s*(!undef)\s+({entityName})\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+        }
+        {
+          name: 'meta.preprocessor.definelong'
+          begin: ///^\s*(!definelong)\s+({entityName})(\()([^)]*)(\))\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+          end: /^\s*(!end\s*definelong)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.ifdef'
+          begin: /^\s*(!ifn?def)\s+({entityName})\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+          end: /^\s*(!endif)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.macrocall'
+          match: /^\s*({entityName})(\()([^)]*)(\))\s*$/
+          captures:
+            '1': { name: '{function_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
         }
       ]
 
