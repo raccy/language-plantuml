@@ -656,7 +656,264 @@
       }
     ]
   'activity_diagram':
-    'patterns': []
+    'patterns': [
+      {
+        'name': 'meta.activitybeta.flow.plantuml'
+        'match': '^\\s*(start|stop|end|detach)\\s*$'
+        'captures':
+          '1':
+            'name': 'keyword.control.plantuml'
+      }
+      {
+        'name': 'meta.activitybeta.step.plantuml'
+        'begin': '^\\s*(\\#\\w+)?(:)'
+        'beginCaptures':
+          '1':
+            'name': 'constant.other.color.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+        'end': '([;<>\\|\\]\\}/])\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.plantuml'
+        'contentName': 'string.plantuml'
+      }
+      {
+        'name': 'meta.activitybeta.arrow.plantuml'
+        'begin': '^\\s*(->|-\\[(\\#\\w+)\\]->)'
+        'beginCaptures':
+          '1':
+            'name': 'constant.plantuml'
+          '2':
+            'name': 'constant.other.color.plantuml'
+        'end': '(;)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.plantuml'
+        'contentName': 'string.plantuml'
+      }
+      {
+        'name': 'meta.activitybeta.swimlane.plantuml'
+        'match': '^\\s*(?:(\\|)(\\#\\w+))?(\\|)([^|]+)(\\|)\\s*$'
+        'captures':
+          '1':
+            'name': 'punctuation.plantuml'
+          '2':
+            'name': 'constant.other.color.plantuml'
+          '3':
+            'name': 'punctuation.plantuml'
+          '4':
+            'name': 'string.plantuml'
+          '5':
+            'name': 'punctuation.plantuml'
+      }
+      {
+        'name': 'meta.activitybeta.if.plantuml'
+        'begin': '^\\s*(if)\\s*(\\()([^\\)]+)(\\))\\s*(then)\\s*(?:(\\()([^\\)]+)(\\)))?\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+          '3':
+            'name': 'string.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+          '5':
+            'name': 'keyword.control.plantuml'
+          '6':
+            'name': 'punctuation.plantuml'
+          '7':
+            'name': 'string.plantuml'
+          '8':
+            'name': 'punctuation.plantuml'
+        'end': '^\\s*(endif)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+          {
+            'name': 'meta.activitybeta.elseif.plantuml'
+            'match': '^\\s*(elseif)\\s*(\\()([^\\)]+)(\\))\\s*(then)\\s*(?:(\\()([^\\)]+)(\\)))?\\s*$'
+            'captures':
+              '1':
+                'name': 'keyword.control.plantuml'
+              '2':
+                'name': 'punctuation.plantuml'
+              '3':
+                'name': 'string.plantuml'
+              '4':
+                'name': 'punctuation.plantuml'
+              '5':
+                'name': 'keyword.control.plantuml'
+              '6':
+                'name': 'punctuation.plantuml'
+              '7':
+                'name': 'string.plantuml'
+              '8':
+                'name': 'punctuation.plantuml'
+          }
+          {
+            'name': 'meta.activitybeta.else.plantuml'
+            'match': '^\\s*(else)\\s*(?:(\\()([^\\)]+)(\\)))?\\s*$'
+            'captures':
+              '1':
+                'name': 'keyword.control.plantuml'
+              '2':
+                'name': 'punctuation.plantuml'
+              '3':
+                'name': 'string.plantuml'
+              '4':
+                'name': 'punctuation.plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.activitybeta.while.plantuml'
+        'begin': '^\\s*(while)\\s*(\\()([^\\)]+)(\\))(?:\\s*(is)\\s*(\\()([^\\)]+)(\\)))?\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+          '3':
+            'name': 'string.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+          '5':
+            'name': 'keyword.control.plantuml'
+          '6':
+            'name': 'punctuation.plantuml'
+          '7':
+            'name': 'string.plantuml'
+          '8':
+            'name': 'punctuation.plantuml'
+        'end': '^\\s*(end\\s*while)(?:\\s*(\\()([^\\)]+)(\\)))?\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+          '3':
+            'name': 'string.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+        ]
+      }
+      {
+        'name': 'meta.activitybeta.repeat.plantuml'
+        'begin': '^\\s*(repeat)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(repeat\\s+while)\\s*(\\()([^\\)]+)(\\))\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'punctuation.plantuml'
+          '3':
+            'name': 'string.plantuml'
+          '4':
+            'name': 'punctuation.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+        ]
+      }
+      {
+        'name': 'meta.activitybeta.fork.plantuml'
+        'begin': '^\\s*(fork)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(end\\s*fork)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+          {
+            'name': 'meta.activitybeta.forkagain.plantuml'
+            'match': '^\\s*(fork\\s+again)\\s*$'
+            'captures':
+              '1':
+                'name': 'keyword.control.plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.activitybeta.split.plantuml'
+        'begin': '^\\s*(split)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'end': '^\\s*(end\\s*split)\\s*$'
+        'endCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+          {
+            'name': 'meta.activitybeta.splitagain.plantuml'
+            'match': '^\\s*(split\\s+again)\\s*$'
+            'captures':
+              '1':
+                'name': 'keyword.control.plantuml'
+          }
+        ]
+      }
+      {
+        'name': 'meta.activitybeta.partition.plantuml'
+        'begin': '^\\s*(partition)\\s*(.*)\\s*(\\{)\\s*$'
+        'beginCaptures':
+          '1':
+            'name': 'keyword.control.plantuml'
+          '2':
+            'name': 'string.plantuml'
+          '3':
+            'name': '{punc_name}.plantuml'
+        'end': '^\\s*(\\})\\s*$'
+        'endCaptures':
+          '1':
+            'name': '{punc_name}.plantuml'
+        'patterns': [
+          {
+            'include': '#common'
+          }
+          {
+            'include': '#activity_diagram'
+          }
+        ]
+      }
+    ]
   'component_diagram':
     'patterns': []
   'state_diagram_start':

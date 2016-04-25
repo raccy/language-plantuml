@@ -706,6 +706,226 @@ grammar =
     # TODO: implement activity_diagram
     'activity_diagram':
       patterns: [
+        {
+          name: 'meta.activitybeta.flow'
+          match: /^\s*(start|stop|end|detach)\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
+        }
+        {
+          name: 'meta.activitybeta.step'
+          begin: /^\s*({color})?(:)/
+          beginCaptures:
+            '1': { name: '{color_name}' }
+            '2': { name: '{punct_name}' }
+          end: ///([;<>\|\]\}/])\s*$///
+          endCaptures:
+            '1': { name: '{punct_name}' }
+          contentName: '{string_name}'
+        }
+        {
+          name: 'meta.activitybeta.arrow'
+          begin: /^\s*(->|-\[({color})\]->)/
+          beginCaptures:
+            '1': { name: '{other_name}' }
+            '2': { name: '{color_name}' }
+          end: /(;)\s*$/
+          endCaptures:
+            '1': { name: '{punct_name}' }
+          contentName: '{string_name}'
+        }
+        {
+          name: 'meta.activitybeta.swimlane'
+          match: /^\s*(?:(\|)({color}))?(\|)([^|]+)(\|)\s*$/
+          captures:
+            '1': { name: '{punct_name}' }
+            '2': { name: '{color_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+        }
+        {
+          name: 'meta.activitybeta.if'
+          begin: ///^\s*
+                (if)\s*
+                (\()([^\)]+)(\))\s*
+                (then)\s*
+                (?:(\()([^\)]+)(\)))?\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{punct_name}' }
+            '7': { name: '{string_name}' }
+            '8': { name: '{punct_name}' }
+          end: /^\s*(endif)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.elseif'
+              match: ///^\s*
+                    (elseif)\s*
+                    (\()([^\)]+)(\))\s*
+                    (then)\s*
+                    (?:(\()([^\)]+)(\)))?\s*$///
+              captures:
+                '1': { name: '{keyword_name}' }
+                '2': { name: '{punct_name}' }
+                '3': { name: '{string_name}' }
+                '4': { name: '{punct_name}' }
+                '5': { name: '{keyword_name}' }
+                '6': { name: '{punct_name}' }
+                '7': { name: '{string_name}' }
+                '8': { name: '{punct_name}' }
+            }
+            {
+              name: 'meta.activitybeta.else'
+              match: ///^\s*
+                    (else)\s*
+                    (?:
+                      (\()([^\)]+)(\))
+                    )?\s*$///
+              captures:
+                '1': { name: '{keyword_name}' }
+                '2': { name: '{punct_name}' }
+                '3': { name: '{string_name}' }
+                '4': { name: '{punct_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.while'
+          begin: ///^\s*
+                (while)\s*
+                (\()([^\)]+)(\))
+                (?:
+                  \s*(is)\s*
+                  (\()([^\)]+)(\))
+                )?\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{punct_name}' }
+            '7': { name: '{string_name}' }
+            '8': { name: '{punct_name}' }
+          end: ///^\s*
+                (end\s*while)
+                (?:
+                  \s*
+                  (\()([^\)]+)(\))
+                )?
+                \s*$///
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.repeat'
+          begin: /^\s*(repeat)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(repeat\s+while)\s*(\()([^\)]+)(\))\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.fork'
+          begin: /^\s*(fork)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(end\s*fork)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.forkagain'
+              match: /^\s*(fork\s+again)\s*$/
+              captures:
+                '1': { name: '{keyword_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.split'
+          begin: /^\s*(split)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(end\s*split)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.splitagain'
+              match: /^\s*(split\s+again)\s*$/
+              captures:
+                '1': { name: '{keyword_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.partition'
+          begin: /^\s*(partition)\s*(.*)\s*(\{)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
+            '3': { name: '{punc_name}' }
+          end: /^\s*(\})\s*$/
+          endCaptures:
+            '1': { name: '{punc_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
       ]
     # TODO: implement component_diagram
     'component_diagram':
