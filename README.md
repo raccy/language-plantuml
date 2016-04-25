@@ -1,16 +1,16 @@
-# PlantUML language supoort in Atom
+# PlantUML language support in Atom
 
 Adds syntax highlighting and snippets to PlantUML files in Atom.
 
 ## Task list
 
-Contents of PlatUML Language Reference Guid
+Contents of PlantUML Language Reference Guid
 
 - [ ] Sequence Diagram
     - [x] Basic examples
     - [x] Comments
     - [x] Declaring participant
-    - [x] Use non-letters inparticipants
+    - [x] Use non-letters in participants
     - [x] Message to Self
     - [x] Change arrow style
     - [x] Change arrow color
