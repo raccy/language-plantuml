@@ -7,6 +7,7 @@ grammar =
 
   macros:
     keyword_name: 'keyword.control'
+    function_name: 'entity.name.function'
     other_name: 'constant'
     file_name: 'string.other.link'
     punct_name: 'punctuation'
@@ -31,7 +32,8 @@ grammar =
                   |
                   -(?:d|do|down|u|up|r|ri|right|l|le|left)?->
                 )///
-    arrow_name: 'entity.name.function'
+
+    arrow_name: '{function_name}'
     stringQuoted: /{entityQuoted}/
     string_name: 'string'
     participant: /(?:actor|boundary|control|entity|database|participant)/
@@ -60,6 +62,17 @@ grammar =
       patterns: [
         {
           include: '#comments'
+        }
+        {
+          include: "#preprocessor"
+        }
+        {
+          name: 'meta.pragma'
+          match: /^\s*(!pragma)\s+(\S+)\s+(.*)$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{other_name}' }
+            '3': { name: '{string_name}' }
         }
         {
           name: 'meta.scale'
@@ -106,6 +119,25 @@ grammar =
           beginCaptures:
             '1': { name: '{keyword_name}' }
           end: /^\s*(end\s*title)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          contentName: '{string_name}'
+        }
+        {
+          name: 'meta.header.line'
+          match: /^\s*(?:(center|left|right)\s+)?(header|footer)\s+(\S.*)$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+            '3': { name: '{string_name}' }
+        }
+        {
+          name: 'meta.header.block'
+          begin: /^\s*(?:(center|left|right)\s+)?(header|footer)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{keyword_name}' }
+          end: /^\s*(end\s*\2)\s*$/
           endCaptures:
             '1': { name: '{keyword_name}' }
           contentName: '{string_name}'
@@ -215,14 +247,6 @@ grammar =
           include: "#object_diagram"
         }
 
-        # {
-        #   # TODO: c-like macro
-        #   match: '^\\s*(!(?:define|endif|ifdef|ifndef|include|undef))\\b.*$'
-        #   captures:
-        #     '1':
-        #       name: '{keyword_name}.import'
-        #   name: 'meta.preprocessor'
-        # }
         # {
         #   # TODO: escaped character
         #   match: '(")([^"]*)(")'
@@ -336,7 +360,7 @@ grammar =
         {
           name: 'meta.sequence.alt'
           begin: ///^\s*
-              (alt)
+              (alt|par)
               (?:\s+(.*))?\s*
               $///
           beginCaptures:
@@ -394,7 +418,7 @@ grammar =
         {
           name: 'meta.sequence.groupalt'
           begin: ///^\s*
-                (opt|loop|par|break|critical)
+                (opt|loop|break|critical)
                 (?:\s+(.*))?
                 \s*$///
           beginCaptures:
@@ -543,6 +567,12 @@ grammar =
             '1': { name: '{punct_name}' }
             '2': { name: '{punct_name}' }
             '3': { name: '{number_name}' }
+        }
+        {
+          name: 'meta.sequence.footbox'
+          match: /^\s*(hide\s+footbox)\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
         }
       ]
     # TODO: implement usecase_diagram
@@ -706,6 +736,226 @@ grammar =
     # TODO: implement activity_diagram
     'activity_diagram':
       patterns: [
+        {
+          name: 'meta.activitybeta.flow'
+          match: /^\s*(start|stop|end|detach)\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
+        }
+        {
+          name: 'meta.activitybeta.step'
+          begin: /^\s*({color})?(:)/
+          beginCaptures:
+            '1': { name: '{color_name}' }
+            '2': { name: '{punct_name}' }
+          end: ///([;<>\|\]\}/])\s*$///
+          endCaptures:
+            '1': { name: '{punct_name}' }
+          contentName: '{string_name}'
+        }
+        {
+          name: 'meta.activitybeta.arrow'
+          begin: /^\s*(->|-\[({color})\]->)/
+          beginCaptures:
+            '1': { name: '{other_name}' }
+            '2': { name: '{color_name}' }
+          end: /(;)\s*$/
+          endCaptures:
+            '1': { name: '{punct_name}' }
+          contentName: '{string_name}'
+        }
+        {
+          name: 'meta.activitybeta.swimlane'
+          match: /^\s*(?:(\|)({color}))?(\|)([^|]+)(\|)\s*$/
+          captures:
+            '1': { name: '{punct_name}' }
+            '2': { name: '{color_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+        }
+        {
+          name: 'meta.activitybeta.if'
+          begin: ///^\s*
+                (if)\s*
+                (\()([^\)]+)(\))\s*
+                (then)\s*
+                (?:(\()([^\)]+)(\)))?\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{punct_name}' }
+            '7': { name: '{string_name}' }
+            '8': { name: '{punct_name}' }
+          end: /^\s*(endif)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.elseif'
+              match: ///^\s*
+                    (elseif)\s*
+                    (\()([^\)]+)(\))\s*
+                    (then)\s*
+                    (?:(\()([^\)]+)(\)))?\s*$///
+              captures:
+                '1': { name: '{keyword_name}' }
+                '2': { name: '{punct_name}' }
+                '3': { name: '{string_name}' }
+                '4': { name: '{punct_name}' }
+                '5': { name: '{keyword_name}' }
+                '6': { name: '{punct_name}' }
+                '7': { name: '{string_name}' }
+                '8': { name: '{punct_name}' }
+            }
+            {
+              name: 'meta.activitybeta.else'
+              match: ///^\s*
+                    (else)\s*
+                    (?:
+                      (\()([^\)]+)(\))
+                    )?\s*$///
+              captures:
+                '1': { name: '{keyword_name}' }
+                '2': { name: '{punct_name}' }
+                '3': { name: '{string_name}' }
+                '4': { name: '{punct_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.while'
+          begin: ///^\s*
+                (while)\s*
+                (\()([^\)]+)(\))
+                (?:
+                  \s*(is)\s*
+                  (\()([^\)]+)(\))
+                )?\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+            '5': { name: '{keyword_name}' }
+            '6': { name: '{punct_name}' }
+            '7': { name: '{string_name}' }
+            '8': { name: '{punct_name}' }
+          end: ///^\s*
+                (end\s*while)
+                (?:
+                  \s*
+                  (\()([^\)]+)(\))
+                )?
+                \s*$///
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.repeat'
+          begin: /^\s*(repeat)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(repeat\s+while)\s*(\()([^\)]+)(\))\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.fork'
+          begin: /^\s*(fork)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(end\s*fork)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.forkagain'
+              match: /^\s*(fork\s+again)\s*$/
+              captures:
+                '1': { name: '{keyword_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.split'
+          begin: /^\s*(split)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+          end: /^\s*(end\s*split)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+            {
+              name: 'meta.activitybeta.splitagain'
+              match: /^\s*(split\s+again)\s*$/
+              captures:
+                '1': { name: '{keyword_name}' }
+            }
+          ]
+        }
+        {
+          name: 'meta.activitybeta.partition'
+          begin: /^\s*(partition)\s*(.*)\s*(\{)\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{string_name}' }
+            '3': { name: '{punc_name}' }
+          end: /^\s*(\})\s*$/
+          endCaptures:
+            '1': { name: '{punc_name}' }
+          patterns: [
+            {
+              include: '#common'
+            }
+            {
+              include: '#activity_diagram'
+            }
+          ]
+        }
       ]
     # TODO: implement component_diagram
     'component_diagram':
@@ -959,6 +1209,83 @@ grammar =
             '3': { name: 'keyword.operator' }
             '4': { name: '{entity_name}' }
           }
+        }
+      ]
+
+    'preprocessor':
+      patterns: [
+        {
+          name: 'meta.preprocessor.include'
+          match: /^\s*(!include)\s+(.*)$/
+          captures: {
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{entity_name}' }
+          }
+        }
+        {
+          name: 'meta.preprocessor.define'
+          begin: /^\s*(!define)\s+({entityName})(?:(\()([^)]*)(\)))?\s*/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+          end: /\s*$/
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.undef'
+          match: /^\s*(!undef)\s+({entityName})\s*$/
+          captures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+        }
+        {
+          name: 'meta.preprocessor.definelong'
+          begin: ///^\s*(!definelong)\s+({entityName})(\()([^)]*)(\))\s*$///
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+            '3': { name: '{punct_name}' }
+            '4': { name: '{string_name}' }
+            '5': { name: '{punct_name}' }
+          end: /^\s*(!end\s*definelong)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.ifdef'
+          begin: /^\s*(!ifn?def)\s+({entityName})\s*$/
+          beginCaptures:
+            '1': { name: '{keyword_name}' }
+            '2': { name: '{function_name}' }
+          end: /^\s*(!endif)\s*$/
+          endCaptures:
+            '1': { name: '{keyword_name}' }
+          patterns: [
+            {
+              include: '#plantuml'
+            }
+          ]
+        }
+        {
+          name: 'meta.preprocessor.macrocall'
+          match: /^\s*({entityName})(\()([^)]*)(\))\s*$/
+          captures:
+            '1': { name: '{function_name}' }
+            '2': { name: '{punct_name}' }
+            '3': { name: '{string_name}' }
+            '4': { name: '{punct_name}' }
         }
       ]
 

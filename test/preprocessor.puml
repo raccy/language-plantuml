@@ -1,0 +1,45 @@
+@startuml
+!define SEQUENCE (S,#AAAAAA) Database Sequence
+!define TABLE (T,#FFAAAA) Database Table
+class USER << TABLE >>
+class ACCOUNT << TABLE >>
+class UID << SEQUENCE >>
+USER "1" -- "*" ACCOUNT
+!undef TABLE
+USER -> UID
+@enduml
+
+@startuml
+!define module(x) component x <<module >>
+module(ABC)
+module(XYZ)
+!undef module
+@enduml
+
+@startuml
+!define send(a,b,c) a->b : c
+send(Alice , Bob , Hello)
+send(Bob , Alice , ok)
+@enduml
+
+@startuml
+class ArrayList
+
+!ifdef SHOW_METHODS
+  ArrayList : int size()
+  ArrayList : void clear()
+!endif
+
+!ifndef SHOW_METHODS
+  ArrayList : int size()
+  ArrayList : void clear()
+!endif
+
+!define DOUBLE(x) x x
+!definelong AUTHEN(x,y)
+  x -> y : DOUBLE(hello)
+  y -> x : ok
+!enddefinelong
+
+AUTHEN(Bob ,Alice)
+@enduml

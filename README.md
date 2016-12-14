@@ -1,16 +1,16 @@
-# PlantUML language supoort in Atom
+# PlantUML language support in Atom
 
 Adds syntax highlighting and snippets to PlantUML files in Atom.
 
 ## Task list
 
-Contents of PlatUML Language Reference Guid
+Contents of PlantUML Language Reference Guid
 
 - [ ] Sequence Diagram
     - [x] Basic examples
     - [x] Comments
     - [x] Declaring participant
-    - [x] Use non-letters inparticipants
+    - [x] Use non-letters in participants
     - [x] Message to Self
     - [x] Change arrow style
     - [x] Change arrow color
@@ -24,16 +24,16 @@ Contents of PlatUML Language Reference Guid
     - [x] Changing notes shape
     - [ ] Creole and HTML
     - [x] Divider
-    - [X] Reference
-    - [X] Delay
-    - [X] Space
-    - [X] Lifeline Activation and Destruction
-    - [X] Participant creation
-    - [X] Incoming and outgoing messages
+    - [x] Reference
+    - [x] Delay
+    - [x] Space
+    - [x] Lifeline Activation and Destruction
+    - [x] Participant creation
+    - [x] Incoming and outgoing messages
     - [ ] Stereotypes and Spots
     - [ ] More information on titles
-    - [X] Participants encompass
-    - [ ] Removing Footer
+    - [x] Participants encompass
+    - [x] Removing Footer
     - [ ] Skinparam
 - [ ] Use Case Diagram
     - [ ] Usecases
@@ -93,21 +93,21 @@ Contents of PlatUML Language Reference Guid
     - [ ] Octagon
     - [ ] Complete example
 - [ ] Activity Diagram (beta)
-    - [ ] Simple Activity
-    - [ ] Start/Stop
-    - [ ] Conditional
-    - [ ] Repeat loop
-    - [ ] While loop
-    - [ ] Parallel processing
-    - [ ] Notes
+    - [x] Simple Activity
+    - [x] Start/Stop
+    - [x] Conditional
+    - [x] Repeat loop
+    - [x] While loop
+    - [x] Parallel processing
+    - [x] Notes
     - [ ] Title Legend
-    - [ ] Colors
-    - [ ] Arrows
-    - [ ] Grouping
-    - [ ] Swimlanes
-    - [ ] Detach
-    - [ ] SDL
-    - [ ] Complete example
+    - [x] Colors
+    - [x] Arrows
+    - [x] Grouping
+    - [x] Swimlanes
+    - [x] Detach
+    - [x] SDL
+    - [x] Complete example
 - [ ] Component Diagram
     - [ ] Components
     - [ ] Interfaces
@@ -119,12 +119,12 @@ Contents of PlatUML Language Reference Guid
     - [ ] Use UML2 notation
     - [ ] Skinparam
 - [ ] State Diagram
-    - [X] Simple State
-    - [X] Composite state
-    - [X] Long name
-    - [X] Concurrent state
-    - [X] Arrow direction
-    - [X] Note
+    - [x] Simple State
+    - [x] Composite state
+    - [x] Long name
+    - [x] Concurrent state
+    - [x] Arrow direction
+    - [x] Note
     - [ ] More in notes
     - [ ] Skinparam
 - [ ] Object Diagram
@@ -164,11 +164,11 @@ Contents of PlatUML Language Reference Guid
     - [ ] Fontcolor, nameandsize
     - [ ] Blackand White
 - [ ] Preprocessing
-    - [ ] Including files
-    - [ ] Constant definition
-    - [ ] Macro definition
-    - [ ] Macro onseverallines
-    - [ ] Conditions
+    - [x] Including files
+    - [x] Constant definition
+    - [x] Macro definition
+    - [x] Macro onseverallines
+    - [x] Conditions
     - [ ] Search path
     - [ ] Advanced features
 - [ ] Internationalization
