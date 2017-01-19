@@ -3,7 +3,7 @@
 grammar =
   name: "PlantUML"
   scopeName: "source.plantuml"
-  fileTypes: [ "puml", "plantuml", "txt" ]
+  fileTypes: [ "puml", "plantuml", "pu", "iuml", "txt" ]
 
   macros:
     keyword_name: 'keyword.control'
